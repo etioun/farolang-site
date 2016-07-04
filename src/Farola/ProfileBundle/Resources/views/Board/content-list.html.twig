@@ -1,0 +1,7 @@
+{% import '::global_macros.html.twig' as gm %}
+{% import 'FarolaProfileBundle:Content:m-profile.html.twig' as nm %}
+
+{{ nm.profile_list(pagProfiles, false)}}
+
+{% set nextFirstResult = pagProfiles.query.firstResult + pagProfiles.query.maxResults %}
+{{ gm.showMoreLink(pagProfiles, searchForm.vars.full_name, path('farola_profile_board_more_ajax', {'firstResult':nextFirstResult})) }}

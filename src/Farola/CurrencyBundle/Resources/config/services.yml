@@ -1,0 +1,7 @@
+services:
+    farola_currency.form.type.currency:
+        class: Farola\CurrencyBundle\Form\CurrencyType
+        arguments: ['@lexik_currency.default_adapter']
+        tags:
+            - { name: form.type, alias: farola_currencybundle_currency }
+

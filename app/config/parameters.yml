@@ -1,0 +1,21 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_driver: pdo_mysql
+    database_host: 127.0.0.1
+    database_port: 8889
+    database_name: farola
+    database_user: root
+    database_password: root
+    mailer_transport: gmail
+    mailer_host: 127.0.0.1
+    mailer_user: etdevsmtp@gmail.com
+    mailer_password: farolafarola
+    locale: en
+    secret: 86fb0eddc3ec36a4b0bce6900a88a12bfa4bdef4
+    debug_toolbar: true
+    debug_redirects: true
+    use_assetic_controller: true
+    profile_picture.dir.path: /Users/etiennestandard/Sites/farola-profile-pictures
+    profile_picture.dir.url: /farola-profile-pictures
+    #router.request_context.host: 'devfarola:8888/'
+    #router.request_context.base_url: /app_dev.php

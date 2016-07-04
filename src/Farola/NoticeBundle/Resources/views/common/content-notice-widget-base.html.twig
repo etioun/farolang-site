@@ -1,0 +1,155 @@
+  {% import '::global_macros.html.twig' as gm %}
+
+{% macro tags(notice) %}
+  {# <div class="col-md-12"> #}
+          <h5 style="margin-top:5px;">
+            <span class="glyphicon glyphicon-tags" style="margin-right: 5px;top: 3px;"></span>
+            {% for tag in notice.tags %}
+            <span class="label label-default">{{ nh.tagNameByCategory(notice.category,tag)}}</span>
+            {% endfor %}
+          </h5>
+      {# </div> #}
+{% endmacro %}
+
+
+{% set noticeProfile = notice.profile %}
+
+{% if editionMode and ( app.user == noticeProfile.user ) %}
+  <div class="frl-margin-bottom-xs">
+  {% if notice.activated %}
+    <span class="label label-success label-md"><span class="glyphicon glyphicon-flash"> </span>Active</span>
+  {% else %}
+    <span class="label label-default label-md"><span class="glyphicon glyphicon-flash"> </span>Disabled</span>
+  {% endif %}
+  <a class="btn btn-warning btn-xs " href="{{ path('farola_notice_edit', { 'noticeId': notice.id }) }}"><span class="glyphicon glyphicon-cog"></span>  Edit&hellip;</a>
+  <a href="javascript:void(0)" class="btn btn-danger btn-xs " onclick="farolaCommon.sendChangeRequest('{{ path('farola_notice_delete_ajax', { 'noticeId':notice.id }) }}', '{{ path('farola_notice_my_list') }}');"><span class="glyphicon glyphicon-trash"></span> Delete </a>
+  </div>
+
+{% endif %}
+<div>
+  <div class="row ">
+    {% block headline %}
+      {{ showMode ? '' : mwc.quickDescription(notice, 'right') }}
+    {% endblock headline %}
+  </div>
+  <div class="row ">
+    <div class="col-md-2">
+      <a href="{{ path('farola_profile_show', {'profileId': noticeProfile.id }) }}">
+        <div class="thumbnail frl-margin-bottom-xs " style="max-width:150px; margin-left: auto; margin-right: auto">
+          <img src="{{ ph.profilePictureUrl(noticeProfile) }}" width="150" height="150" >
+        </div>
+      </a>
+    </div>
+    <div class="col-md-6">
+       <div class="row">
+        <div class="col-xs-12 frl-no-padding">
+          <h4 class="frl-result-title">
+            <a href="{{ path('farola_profile_show', {'profileId': noticeProfile.id }) }}">{{ noticeProfile.name }}</a>
+              <small><a href="{{ path('farola_profile_show', { 'profileId': noticeProfile.id, }) }}#reviews" >{{ '{0} (not yet reviewed)|{1} 1 Review|]1,Inf] %count% Reviews'|transchoice(noticeProfile.aggReviewCount) }} </a></small>
+          </h4>
+        </div>
+      </div>
+      <div class="row">
+        <p class="frl-result-metadata">
+          {% if noticeProfile.countryOfOrigin %}From {{ph.countryName(noticeProfile.countryOfOrigin)}}{% endif %}
+            {% if noticeProfile.dateOfBirth and noticeProfile.countryOfOrigin %}, {% endif %}
+              {% if noticeProfile.dateOfBirth %} {{ ph.age(noticeProfile) }} years old{% endif %}
+              </p>
+      </div>
+      {% if notice.onlineService and noticeProfile.country %}
+       <div class="row">
+        <span class="glyphicon glyphicon-map-marker"></span> Lives in <b>{{ ph.countryName(noticeProfile.country) }}</b>
+       </div>
+      {% elseif noticeProfile.address and (noticeProfile.address != notice.address) %}
+        <div class="row">
+          <span class="glyphicon glyphicon-map-marker"></span> Lives near <b>{{ noticeProfile.address }}</b>
+       </div>
+      {% endif %}
+      {% if noticeProfile.spokenLanguages %}
+       <div class="row">
+        <span class="fa fa-comments"></span>
+        {% for languageLvl in ph.languageLvlArr(noticeProfile) %}
+          {{ gm.languageLvl_widget(languageLvl) }}
+        {% endfor %}
+      </div>
+    {% endif %}
+       <div class="row">
+        {{ showMode ? mwc.quickDescription(notice, 'left') : '' }}
+      </div>
+      <div class="row">
+        {% if (notice.tags and showMode) %}
+          {{ _self.tags(notice) }}
+        {% endif %}
+      </div>
+    </div> 
+    <div class="col-md-3 col-md-offset-0">
+     {% block main_right %}
+     {% endblock main_right %}
+    </div>
+  </div>
+  <div class="row" >
+    {% block below_profile_row %}
+      {% if (notice.tags and (showMode == false)) %}
+        <div class="col-md-12">
+         {{ _self.tags(notice) }}
+        </div>
+      {% endif %}
+    {% endblock below_profile_row %}
+  </div>
+  <div class="row">
+    {% block bottom_row %}
+    {% endblock bottom_row %}
+  </div>
+</div> 
+
+<div class="modal fade" id="{{notice.id}}-avail" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+  <div class="modal-dialog  modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Availability</h4>
+      </div>
+      <div class="modal-body">
+        {% if notice.availableAnytime %}
+          <p class="text-success">Available anytime</p>
+        {% else %}
+          <p >For the timezone {{ app.user ? app.user.prefTimezone : notice.timezone }}</p>
+        {% endif %}
+          <div class="table-responsive">
+           <table class="table table-condensed table-hover " >
+            <thead>
+              <tr>
+                <th class="col-xs-1 col-md-1">#</th>
+                <th class="col-xs-2 col-md-2" colspan=6>Midnight</th>
+                <th class="col-md-3" colspan=6>6am</th>
+                <th class="col-md-3" colspan=5>Noon</th>
+                <th class="col-md-3" colspan=7>5pm</th>
+              </tr>
+            </thead>
+            <tbody>
+             {% for day in nh.availabilitiesView(notice, (app.user ? app.user.prefTimezone : notice.timezone)) %}
+              <tr>
+                <td class="active"><b>{{nh.dayOfWeekName(day['day'])}}</b></td>
+                {% for period in day['periods'] %}
+                  {% if period['avail'] %}
+                    <td class="success" colspan="{{period['span']}}" style="clear:both;">
+                      {% if period['span'] < 24 %}
+                        <span style="float:left;">{{nh.hourStr(period['min'],'en')}}</span>  <span style="float:right;">{{nh.hourStr(period['max'],'en')}}</span>
+                      {% endif %}
+                    </td>
+                    {% else %}
+                    <td class="active" colspan="{{period['span']}}"></td>
+                  {% endif %}
+                {% endfor %}
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button  type="button" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+  </div>
+</div>
+</div>

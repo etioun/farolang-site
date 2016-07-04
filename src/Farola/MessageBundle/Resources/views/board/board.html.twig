@@ -1,0 +1,30 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}Farolang - Message board{% endblock %}
+
+{% block body %}
+    {% set nbUnreadGeneral = mh.nbUnreadGeneral(ph.currentUserProfile()) %}
+    {% set nbUnreadNoticeRep = mh.nbUnreadNoticeReply(ph.currentUserProfile()) %}
+    
+    <div class="container frl-container-padding-md frl-container" style="padding-top: 30px;" role="main">
+        <div class='row'>
+            <div class='col-xs-12 col-md-5' style="margin-left:6%;padding-right:6%;">
+                <ul class="nav nav-tabs" style="margin-bottom:10px">
+                  <li role="presentation" class={% if category == 'general' %}"active"{% endif %}><a href="{{ path('farola_message_board',{'category':'general'}) }}">General messages  {% if (nbUnreadGeneral >0 ) %}<span class="badge frl-badge-red" >{{nbUnreadGeneral}}</span>{% endif %} </a></li>
+                  <li role="presentation" class={% if category == 'notice' %}"active"{% endif %}><a href="{{ path('farola_message_board',{'category':'notice'}) }}">Notice replies {% if (nbUnreadNoticeRep >0 ) %}<span class="badge frl-badge-red" >{{nbUnreadNoticeRep}}</span>{% endif %} </a></li>
+                </ul>
+                {% include 'FarolaMessageBundle:Board:content-thread-list.html.twig' %}
+            </div>
+            <div  class='col-xs-12 col-md-6 frl-msg-block '>
+                <div id="messages">
+                    {% if currentThread %}
+                        {% include 'FarolaMessageBundle:Board:content-message-list.html.twig' %}
+                    {% else %}
+                         <a class="btn btn-primary frl-rounded-lg" href="{{ path('farola_profile_contact')}}"> <span class="fa fa-book"></span> Contact book</a>
+                    {% endif %}
+                </div>
+            </div>
+       </div>
+    </div>
+
+{% endblock body %}

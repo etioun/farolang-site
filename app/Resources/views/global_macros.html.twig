@@ -1,0 +1,125 @@
+{% macro og_metatags() %}
+        <meta property="og:title" content="Farolang" />
+        <meta property="og:site_name" content="Farolang"/>
+        <meta property="og:description" content="Find the right person to teach, learn, practice any language, anywhere" />
+         <meta property="og:image" content="{{ app.request.getSchemeAndHttpHost() ~ asset('front/farola/images/farola-fb-03.jpg')}}" />
+         <meta property="og:url" content="http://www.farolang.com" />
+{% endmacro %}
+
+{% macro languageLvl_widget(languageLvl) %}
+    <span style="display:inline-block"> {{ languageLvl['language'] }}
+    {% if languageLvl['level'] == 0 %}<img class="frl-img-lvl" src="/Farola/web/front/farola/images/lvl0.png"/>{% endif %}
+    {% if languageLvl['level'] == 1 %}<img class="frl-img-lvl" src="/Farola/web/front/farola/images/lvl1.png"/>{% endif %}
+    {% if languageLvl['level'] == 2 %}<img class="frl-img-lvl" src="/Farola/web/front/farola/images/lvl2.png"/>{% endif %}
+    {% if languageLvl['level'] == 3 %}<img class="frl-img-lvl" src="/Farola/web/front/farola/images/lvl3.png"/>{% endif %}
+    {% if languageLvl['level'] == 4 %}<img class="frl-img-lvl" src="/Farola/web/front/farola/images/lvl4.png"/>{% endif %}
+    {% if languageLvl['level'] == 5 %}<img class="frl-img-lvl" src="/Farola/web/front/farola/images/lvl5.png"/>{% endif %}
+    {% if languageLvl['level'] == 6 %}<img class="frl-img-lvl" src="/Farola/web/front/farola/images/lvl6.png"/>{% endif %}
+    </span>
+{% endmacro %}
+
+{% macro changeRequestLink(label, url) %}
+	<a href="javascript:void(0)" onclick="farolaCommon.sendChangeRequest('{{ url }}')">{{label}}</a>
+{% endmacro %}
+
+{% macro changeRequestLink(label, url, urlRedirect) %}
+	<a href="javascript:void(0)" onclick="farolaCommon.sendChangeRequest('{{ url }}', '{{ urlRedirect}}')">{{label}}</a>
+{% endmacro %}
+
+{% macro supprLink(url, urlRedirect) %}
+    <a href="javascript:void(0)" onclick="farolaCommon.sendChangeRequest('{{ url }}', '{{ urlRedirect}}')"><span class="glyphicon glyphicon-trash" style="color:rgb(242, 19, 19);"></span></a>
+{% endmacro %}
+
+{# {% macro goBackButton() %}
+    <button class="btn btn-primary frl-rounded-lg" onclick="history.back()"><span class="glyphicon glyphicon-arrow-left"></span> Go back</button>
+{% endmacro %} #}
+
+{% macro showMoreLink(paginator,formSearchName, url) %}
+	{% set nextFirstResult = paginator.query.firstResult + paginator.query.maxResults %}
+	{% if  (nextFirstResult < paginator.count) and (paginator.count > 0) %}
+    	<div class="frl-see-more">
+			 {% set JsGetMore = "farolaCommon.moreResultsRequest('" ~ formSearchName ~ "','" ~ url ~ "', $(this).parent().next('.nextResultsContainer'));$(this).parent().remove();" %}
+
+       <a href="javascript:void(0)" onclick="{{JsGetMore |e }}"><span style="font-size:0.8em;"class="glyphicon glyphicon-arrow-down"></span> Next results <span style="font-size:0.8em;" class="glyphicon glyphicon-arrow-down"></span></a>
+		  </div>
+      <div class="nextResultsContainer"></div>
+
+      
+	{% endif %}
+{% endmacro %}
+
+{% macro goMyNoticesButton() %}
+   <a class="btn btn-primary frl-rounded-lg" href="{{ path('farola_notice_my_list') }}">Go to my notices <span class="glyphicon glyphicon-arrow-right"></span></a>
+{% endmacro %}
+
+{% macro viewProfileButton(profile, cssClassToAdd) %}
+   <a class="btn btn-primary frl-rounded-lg {{cssClassToAdd}}" href="{{ path('farola_profile_show', {'profileId': profile.id , 'showGoBack':1 })}}"><span class="glyphicon glyphicon-eye-open"></span>  View profile</a>
+{% endmacro %}
+
+{% macro viewNoticeButton(notice, cssClassToAdd) %}
+   <a class="btn btn-success frl-rounded-lg {{cssClassToAdd}}" href="{{ path('farola_notice_show', {'noticeId': notice.id , 'showGoBack':1 })}}"><span class="glyphicon glyphicon-eye-open"></span>  View more</a>
+{% endmacro %}
+
+{% macro viewNoticeButton2(notice, cssClassToAdd) %}
+   <a class="btn btn-primary frl-rounded-lg {{cssClassToAdd}}" href="{{ path('farola_notice_show', {'noticeId': notice.id , 'showGoBack':1 })}}"><span class="glyphicon glyphicon-eye-open"></span>  View notice</a>
+{% endmacro %}
+
+{% macro viewNoticeButton3(notice, cssClassToAdd) %}
+   <a style="padding-left: 10px;" class="btn btn-success frl-rounded-lg btn-xs pull-right {{cssClassToAdd}}" href="{{ path('farola_notice_show', {'noticeId': notice.id , 'showGoBack':1 })}}">View more <span class="glyphicon glyphicon-menu-right"></span></a>
+{% endmacro %}
+
+{% macro sendReplyButton(idMsgModal, modalTitle, url, urlRedirect, cssClassToAdd, isDisabled) %}
+  {% set disableReply = '' %}
+  {% if isDisabled %}
+    {% set disableReply = 'disabled="disabled"' %}
+  {% endif %}
+  <button class="btn btn-success frl-rounded-lg frl-margin-bottom-xs {{cssClassToAdd}}"  data-toggle="modal" data-target="#{{idMsgModal}}" {{ disableReply|raw }}>
+        <span class="glyphicon glyphicon-share-alt" ></span>
+        Reply !
+    </button>
+  {{ _self.sendMsgModal( idMsgModal, modalTitle, url, urlRedirect) }}
+{% endmacro %}
+
+{% macro sendReplyButtonFake(cssClassToAdd, link) %}
+  <a href="{{ link }}" class="btn btn-success frl-rounded-lg frl-margin-bottom-xs {{cssClassToAdd}}" >
+        <span class="glyphicon glyphicon-share-alt" ></span>
+        Reply !
+    </a>
+{% endmacro %}
+
+{% macro sendMsgButton( idMsgModal, modalTitle, url, urlRedirect, cssClassToAdd, separateModal = false) %}
+    <button class="btn btn-primary frl-rounded-lg frl-margin-bottom-xs {{cssClassToAdd}}"  data-toggle="modal" data-target="#{{idMsgModal}}" >
+        <span class="glyphicon glyphicon-envelope" ></span>
+        Send a message
+     </button>
+     {% if separateModal == false %}
+      {{ _self.sendMsgModal( idMsgModal, modalTitle, url, urlRedirect) }}
+     {% endif %}
+{% endmacro %}
+
+{% macro sendMsgModal( idMsgModal, modalTitle, url, urlRedirect) %}
+  <div class="modal fade" id="{{idMsgModal}}" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="msg-modal-Label" aria-hidden="true" >
+      <div class="modal-dialog modal-md">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="msg-modal-Label">{{modalTitle}}</h4>
+          </div>
+          <div class="modal-body">
+            <form id="{{idMsgModal}}-form" name="sendMsgFrm" method='post' action="">
+                <textarea rows="7" name="sendMsgFrm[msgTxt]" class="form-control frl-focusme" placeholder="Write your message here..." required></textarea>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button  type="button" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            {% if urlRedirect %}
+              {% set postFct = "farolaCommon.postDataRequest($('#_idMsgModal_-form'), '_url_','_urlRedirect_');"|replace({'_idMsgModal_': idMsgModal, '_url_': url,'_urlRedirect_': urlRedirect}) %}
+            {% else %}
+              {% set postFct = "farolaCommon.postDataRequest($('#_idMsgModal_-form'), '_url_');"|replace({'_idMsgModal_': idMsgModal, '_url_': url}) %}
+            {% endif %}
+            <button type="button" onclick="{{postFct}}" class="btn btn-success" data-dismiss="modal">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endmacro %}

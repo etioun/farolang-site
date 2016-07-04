@@ -1,0 +1,81 @@
+{% import '::global_macros' as gm %}
+
+{% macro noticeIcon(notice) %}
+  {% if (nh.isCategory(notice, 'teacher')) %}
+          <span class="icon-teacher44" ></span>
+  {% elseif (nh.isCategory(notice, 'student')) %}
+          <span class="icon-openbook1" ></span>
+  {% elseif (nh.isCategory(notice, 'language-exchange')) %}
+          <span class="icon-men14"  ></span>
+  {% endif %}
+{% endmacro %}
+
+{% macro description(notice, showFullDescription) %}  
+ {% if showFullDescription == false %}
+  <a class="frl-unstyled-link" href="{{ path('farola_notice_show', {'noticeId': notice.id, 'showGoBack':1})}}">
+    <p class="frl-description-cutted bg-success" >{{ notice.description|length > 100 ? notice.description|slice(0, 100) ~ '...' : notice.description  }}</p>
+  </a>
+  <a href="{{ path('farola_notice_show', {'noticeId': notice.id, 'showGoBack':1})}}" style="border-radius: 25px;position:absolute;right:10px;bottom:5px;">[+]</a>
+  {% else %}
+  <p class="frl-description-no-cut bg-success" >{{ notice.description }}</p>
+{% endif %}
+{% endmacro %}
+
+{% macro quickDescription(notice, iconPosition, cssClass) %}  
+  
+  <p class="frl-quick-description {{cssClass}} "> 
+    {{ (iconPosition == 'left' ) ? _self.noticeIcon(notice) :'' }}
+    {% if (nh.isCategory(notice, 'teacher')) %}
+      Teaches <b>{{ rdh.languageName(notice.teachedLanguage) }}</b>
+
+      {% if notice.onlineService %}
+          online (<b>{{nh.onlineMethName(notice.onlineMethod)}}</b>) 
+       {% endif %}
+       {% if notice.onlineService and notice.nearLocation %}
+          or  
+       {% endif %}
+       {% if notice.nearLocation %}
+          near <b>{{ notice.address}}</b> 
+       {% endif %}
+    {% elseif (nh.isCategory(notice, 'student')) %}
+     Needs a teacher to learn <b>{{ rdh.languageName(notice.learnedLanguage) }}</b>
+       {% if notice.onlineService %}
+          online (<b>{{nh.onlineMethName(notice.onlineMethod)}}</b>) 
+       {% endif %}
+       {% if notice.onlineService and notice.nearLocation %}
+          or  
+       {% endif %}
+       {% if notice.nearLocation %}
+          near <b>{{ notice.address}}</b> 
+       {% endif %}
+     {% elseif (nh.isCategory(notice, 'language-partner')) %}
+     Wants to learn <b>{{ rdh.languageName(notice.learnedLanguage) }}</b> with a language partner, 
+
+        {% if notice.onlineService %}
+          online (<b>{{nh.onlineMethName(notice.onlineMethod)}}</b>) 
+       {% endif %}
+       {% if notice.onlineService and notice.nearLocation %}
+          or  
+       {% endif %}
+       {% if notice.nearLocation %}
+          near <b>{{ notice.address}}</b> 
+       {% endif %}
+    {% elseif (nh.isCategory(notice, 'other')) %}
+      <b>Special</b> (
+        {% if notice.onlineService %}
+            online 
+         {% endif %}
+         {% if notice.onlineService and notice.nearLocation %}
+            or  
+         {% endif %}
+         {% if notice.nearLocation %}
+            near <b>{{ notice.address}}</b> 
+         {% endif %}
+         )
+    {% endif %}
+  {{ (iconPosition == 'right' ) ? _self.noticeIcon(notice) :'' }}
+</p>
+
+
+
+{% endmacro %}

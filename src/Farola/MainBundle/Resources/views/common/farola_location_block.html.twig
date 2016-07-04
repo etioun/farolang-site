@@ -1,0 +1,77 @@
+
+
+{% block farola_location_widget -%}
+	{% set nsp = form.vars.id %}
+
+	{# {<input type="text" class="form-control" onchange="{{nsp}}_selectModule.clearIfDirty()" onfocus="{{nsp}}_selectModule.initInput()" id="{{ }}" value="" {%- if form.vars.required %} required="required"{% endif -%} placeholder="Start typing&hellip;"> #} 
+	{{ form_widget(form.address, {'attr': {'onchange': nsp ~ '_selectModule.clearIfDirty()','onfocus': nsp ~ '_selectModule.initInput()'}}) }}
+	{{ form_widget(form.country) }}
+	{{ form_widget(form.latitude) }}
+	{{ form_widget(form.longitude) }}
+	{{ form_widget(form.placeId) }}
+
+	<script type="text/javascript">
+
+		var {{nsp}}_selectModule = (function(){
+
+			var _initialized = false;
+			var _lastSelected = '';
+
+			function _storeSelection(event, selection){
+				// console.log(selection);
+				if (selection.lat() && selection.lng())
+				{
+					_lastSelected = $('#{{ form.address.vars.id }}').typeahead('val');
+					$('#{{ form.latitude.vars.id }}').val(selection.lat());
+					$('#{{ form.longitude.vars.id }}').val(selection.lng());
+					$('#{{ form.country.vars.id }}').val(selection.nameForType('country',true));
+					$('#{{ form.placeId.vars.id }}').val(selection.placeResult.place_id);
+				}
+				else
+				{
+					$('#{{ form.address.vars.id }}').typeahead('val','');
+				}
+			}
+
+			return {
+				'clearIfDirty': function() {
+					if (_initialized == false)
+						return;
+
+					if (_lastSelected != $('#{{ form.address.vars.id }}').typeahead('val'))
+					{
+						_lastSelected = '';
+						$('#{{ form.address.vars.id }}').typeahead('val','');
+						$('#{{ form.latitude.vars.id }}').val('');
+						$('#{{ form.longitude.vars.id }}').val('');
+						$('#{{ form.country.vars.id }}').val('');
+						$('#{{ form.placeId.vars.id }}').val('');
+					}
+				},
+
+				'initInput': function(){
+					if (_initialized)
+						return;
+
+					_lastSelected = $('#{{ form.address.vars.id }}').val();
+
+					var addressPicker = new AddressPicker({autocompleteService: {
+					    types: ['geocode']
+					  }}
+					);
+
+					$('#{{form.address.vars.id}}').typeahead( {highlight: true}, {
+					  displayKey: 'description',
+					  source: addressPicker.ttAdapter()
+					})
+					addressPicker.bindDefaultTypeaheadEvent($('#{{form.address.vars.id}}'))
+					$(addressPicker).on('addresspicker:selected',  _storeSelection)
+					// .on('typeahead:autocomplete',  _storeSelection)
+
+					_initialized = true;
+					// $('#{{nsp}}_input').focus();
+				}
+			}
+		}())
+	</script>
+{%- endblock farola_location_widget %}

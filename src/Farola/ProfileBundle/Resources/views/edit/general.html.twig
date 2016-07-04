@@ -1,0 +1,83 @@
+{% extends 'FarolaProfileBundle:Edit:base.html.twig' %}
+{% import 'FarolaProfileBundle:Content:m-menu-edit.html.twig' as me %}
+{% form_theme editForm 'FarolaProfileBundle:Edit:edit-blocks.html.twig' %}
+
+{% block edit_menu %}
+    {{ me.menu('general') }}
+{% endblock edit_menu %}
+
+{% block edit_content %}
+
+    {{ form_start(editForm, { 'attr':{'autocomplete':'off'}}) }}
+
+        <div class="row form-group">
+    		<div class="col-xs-4 col-md-3 col-xs-offset-1">
+    			{{ form_label(editForm.name,null ) }}
+    		</div>
+    		<div class="col-xs-5">
+    			{{ form_widget(editForm.name) }}
+    		</div>
+    	</div>
+
+        <div class="row form-group">
+            <div class="col-xs-4 col-md-3 col-xs-offset-1">
+                {{ form_label(editForm.cof,'Country of origin' ) }}
+            </div>
+            <div class="col-xs-5">
+                {{ form_widget(editForm.cof) }}
+            </div>
+        </div>
+
+        <div class="row form-group">
+            <div class="col-xs-4 col-md-3 col-xs-offset-1">
+                {{ form_label(editForm.gender,null) }}
+            </div>
+            <div class="col-xs-5">
+                {{ form_widget(editForm.gender) }}
+            </div>
+        </div>
+
+        <div class="row form-group">
+    		<div class="col-xs-4 col-md-3 col-xs-offset-1">
+    			{{ form_label(editForm.dateOfBirth,null ) }}
+    		</div>
+    		<div class="col-xs-6">
+    			{{ form_widget(editForm.dateOfBirth ) }}
+    		</div>
+    	</div>
+
+    	
+
+        <div class="row form-group">
+            <div class="col-xs-4 col-md-3 col-xs-offset-1">
+                {{ form_label(editForm.location,null) }}
+            </div>
+            <div class="col-xs-6">
+                {{ form_widget(editForm.location)}}
+            </div>
+            
+            
+        </div>
+        
+        <div class="row form-group">
+            <div class="col-xs-4 col-xs-offset-1 col-md-3  col-md-offset-1">
+                {{ form_label(editForm.spokenLanguages,null) }}
+            </div>
+            <div class="col-xs-7 col-md-8   ">
+                {{ form_widget(editForm.spokenLanguages)}}
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-2 col-md-offset-5 btn-block">
+                <button type="submit" class="btn btn-success">
+                    <span class="fa fa-magic"></span>
+                        Update
+                </button>
+             </div>
+        </div>
+
+    {{ form_end	(editForm) }}
+
+{% endblock edit_content %}
+

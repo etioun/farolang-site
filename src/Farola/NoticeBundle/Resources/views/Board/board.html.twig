@@ -1,0 +1,40 @@
+{% extends '::base.html.twig' %}
+{% import 'FarolaNoticeBundle:Common:m-notice.html.twig' as mn %}
+
+{% form_theme searchForm 'FarolaNoticeBundle:Board:board_blocks.html.twig' %}
+
+{% block title %}Farolang - Notice search{% endblock %}
+
+{% block body %}
+<div class="container" role="main">
+    <div class="row">
+        <div class="col-md-3 frl-search-panel">
+        	{{ form_start(searchForm, {'action': path('farola_notice_board_all'),'attr': {'id':'searchForm'}}) }}
+            {{ form_widget(searchForm) }}
+			<div class="text-center">
+           	 <button type="submit" class="btn btn-primary frl-rounded-lg"><span class="glyphicon glyphicon-search" ></span> Search</button>
+        	</div>
+            {{ form_end(searchForm) }}
+        </div>
+        <div class="col-md-9">
+            {% if pagNotices.count > 0 %}
+                {% include 'FarolaNoticeBundle:Board:content-list.html.twig' %}
+            {% else %}
+                <div class="alert alert-success">
+                <p class="text-center"> No matches for this search yet...  </p>
+                <p class="text-center"> Just post a new notice to tell everyone what you're looking for ;)</p> 
+                
+                <p class="text-center"> <b>Simple, quick and easy !</b></p>
+                </div> 
+                <div class="text-center">
+                {# {{ mn.newNoticeCategorySelector('choose_category') }} #}
+                    <a href="{{ path('farola_notice_new')}}" class="btn btn-md btn-success frl-rounded-lg">Yes ! Let's do it !</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock body %}
+
+
+

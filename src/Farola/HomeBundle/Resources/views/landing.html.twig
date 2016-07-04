@@ -1,0 +1,201 @@
+{% import 'FarolaMainBundle:Common:m-input-typeahead.html.twig' as mit %}
+{% import '::global_macros.html.twig' as gm %}
+
+{% macro about_link(style) %}
+    <a style="{{ style }}" href="#" data-toggle="modal" data-target="#aboutModal">About us</a>
+    <div style="text-align:left;font-weight:400;" class="modal fade" id="aboutModal" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="msg-modal-Label" aria-hidden="true" >
+      <div class="modal-dialog modal-md">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="msg-modal-Label">About us</h4>
+          </div>
+          <div class="modal-body">
+            <p style="white-space: pre-wrap;word-wrap: break-word;">
+Nowadays you can find an incredible quantity of language learning apps and softwares&hellip;
+
+While these tools are interesting resources for your language education, they still lack of real life like interactivity to provide you good conversation skills and self-confidence.
+
+Farolang is an initiative to fill that (immense) gap by favoring people encounters all around the planet to help you learn and practice any language in a pleasant, efficient and affordable way. 
+
+Hope you’ll enjoy it !
+
+Farolang’s team <small>part of the ragondins’ collective</small>
+
+Contact address : <a href="mailto:contactus@farolang.com">contactus@farolang.com</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endmacro %}
+
+{% macro credit_link(style) %}
+    <a style="{{ style }}" href="#" data-toggle="modal" data-target="#creditModal">Credits</a>
+    <div style="text-align:left;font-weight:400;" class="modal fade" id="creditModal" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="msg-modal-Label" aria-hidden="true" >
+      <div class="modal-dialog modal-md">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="msg-modal-Label">Credits</h4>
+          </div>
+          <div class="modal-body">
+            <h5 >Support</h5>
+            <p>Thanks to our dears ragondins fellows for the support !</p>
+
+            <h5>Resources under CC Licence</h5>
+            <p>Some resources are under Creative Common licence and credit must return to their  creators :</p>
+            <ul>
+                <li>The icons <span style="margin-right:5px" class="icon-openbook1"></span><span style="margin-right:5px" class="icon-teacher44"></span><span style="margin-right:5px" class="icon-men14"></span> where made by http://www.flaticon.com/authors/freepik</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endmacro %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {{ gm.og_metatags() }}
+
+    <title>Farolang</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/Farola/web/front/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{{asset('front/farola/css/landing-page.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('front/vendor/typeaheadjs.css')}}">
+    <link rel="stylesheet" href="{{ asset('front/farola/css/farola-hacks.css')}}">
+    <link rel="stylesheet" href="{{ asset('front/farola/css/farola.css')}}">
+
+
+    <!-- Custom Fonts -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{{ asset('front/farola/css/farola-fonts.css')}}">
+    <link rel="icon" type="image/png" href="{{ asset('front/farola/images/farola-favicon4.png') }}" />
+
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+    {# <p class="navbar-text visible-lg">Large Devices!</p>
+                 <p class="navbar-text visible-md">Medium Devices!</p>
+                 <p class="navbar-text visible-sm">Small Devices</p>
+                 <p class="navbar-text visible-xs">Extra Small Devices</p> #}
+    <!-- Header -->
+    <div class="intro-header">
+        <ul class="list-inline intro-social-buttons" style="position:absolute;top:10px;right:10px;">
+                            <li>
+                                <a href="{{path('fos_user_security_login')}}" class="btn btn-default btn-sm" style="background-color: rgba(255,255,255,0.8);"><span class="network-name">Log in</span></a>
+                            </li>
+                             <li class="hidden-xs hidden-sm">
+                                <a href="{{ path('fos_user_registration_register') }}" class="btn btn-default btn-sm" style="background-color: rgba(255,255,255,0.8);"><span class="network-name">Create an account</span></a>
+                            </li>
+                        </ul>
+        <div class="container" style="margin-top:20px;">
+
+            <div class="frl-description">
+                <div class="row" >
+                    <div class="col-md-4">
+                        <h3 style="text-shadow: 2px 2px 3px rgba(0,0,0,0.6);"> Find the right person <span class="fa fa-check-circle fa-lg"></span></h3>
+                    </div>
+                    <div class="col-md-4 hidden-xs hidden-sm">
+                        <h3 ><a name="learn" class="text-link icon-margin" href="{{path('farola_notice_board_learn')}}"><span  class="icon-openbook1"></span></a>  <a name="teach" class="text-link icon-margin" href="{{path('farola_notice_board_teach')}}"><span class="icon-teacher44"></span></a>  <a name="practice" class="text-link icon-margin" href="{{path('farola_notice_board_lang_ex')}}"><span class=" icon-men14"></span></a> </h3>
+                    </div>
+                </div>
+                <div class="row" >
+                    <div class="col-md-6 col-md-offset-3">
+                        <h3 style="text-shadow: 2px 2px 3px rgba(0,0,0,0.6);"><a name="learn" class="text-link" href="{{path('farola_notice_board_learn')}}">Learn</a> / <a name="teach" class="text-link" href="{{path('farola_notice_board_teach')}}">Teach</a> / <a name="practice" class="text-link" href="{{path('farola_notice_board_lang_ex')}}">Practice</a> <span id="anyLanguage"style="transition: color ease-in-out .25s">any language</span></h3>
+                    </div>
+                    <div class="col-xs-9 col-xs-offset-0 col-md-3 col-md-offset-8 col-lg-2 ">
+                          <h3 style="text-shadow: 2px 2px 3px rgba(0,0,0,0.6);text-align: right;">Anywhere<span class="glyphicon glyphicon-map-marker"></span></h3>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div style="padding-top:5%;"class="intro-message">
+                        <h1><img src="{{asset('front/farola/images/farola-landing.png')}}" /></h1>
+                      <div class=" col-xs-8 col-xs-offset-2 col-md-4 col-md-offset-4">
+                            {# {{ mit.inputTypeahead('language', 'languageCode', rdh.languages, null, false, '', 'border-radius: 25px;height: 50px;font-size: 1.1em;padding-left: 20px;border-width: 2px;') }} #}
+
+                            <button style="margin-top:5px;" class="btn btn-primary btn-lg frl-rounded-lg" type="button" onclick="goToSearchPage()" ><span class="glyphicon glyphicon-search"></span> Have a look inside !</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <div style="border-top: 3px solid rgb(253, 201, 138);background: rgb(226, 221, 215);padding-top:10px;padding-bottom:10px;padding-right:7%;text-align:right;">
+        <span style="margin-right:10px">Farola, 2015</span>
+        {{ _self.about_link("margin-right:10px;") }}
+        {{ _self.credit_link("margin-right:10px;") }}
+    </div>
+    <!-- /.intro-header -->
+
+    <script src="/Farola/web/front/vendor/jquery-2.1.1.min.js"></script>
+    <script src="/Farola/web/front/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{{asset('front/vendor/typeahead.bundle.min.js')}}"></script>
+
+    <script type="text/javascript">
+        function goToSearchPage() {
+            var url = '{{path('farola_notice_board_search')}}';
+
+            // if ($('#languageCode').val())
+            // {
+            //     url += '/'+ $('#languageCode').val();
+            // }
+            window.location.href=url;
+        }
+
+        function triggerHover(jqSelect) {
+            jqSelect.on('mouseover', function () {
+               // console.log($('[role=learn]'));
+               jqSelect.addClass('text-link-hover');
+            });
+
+            jqSelect.on('mouseout', function () {
+               jqSelect.removeClass('text-link-hover');
+            });
+        }
+
+
+        $( document ).ready(function() {
+            triggerHover($('[name="learn"]'));
+            triggerHover($('[name="teach"]'));
+            triggerHover($('[name="practice"]'));
+
+
+            $('#language > #language_input').on('blur', function(){
+                $('#anyLanguage').css('color','#ffffff');
+            });
+
+             $('#language > #language_input').focus( function(){
+                $('#anyLanguage').css('color','#66afe9');
+            });
+        });
+    </script>
+</body>
+</html>

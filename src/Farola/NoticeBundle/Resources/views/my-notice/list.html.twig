@@ -1,0 +1,19 @@
+{% extends '::base.html.twig' %}
+{% import 'FarolaNoticeBundle:Common:m-notice.html.twig' as mn %}
+
+{% block title %}Farolang - My notices{% endblock %}
+
+{% block body %}
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-md-offset-0" style="margin-bottom:10px;margin-left:10px;">
+        {{ mn.newNoticeCategorySelector('new_notice') }}
+    </div>
+  </div>
+  {% if notices|length > 0 %}
+        {{ mn.notice_list(notices, true) }}
+	{% else %}
+	    <p> You have no notices yet </p>
+	{% endif %}
+</div>
+{% endblock body %}

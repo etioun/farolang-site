@@ -1,0 +1,43 @@
+
+{% macro threadList(threads, inMessageBoard, currentThread, category) %}
+    {% import '::global_macros.html.twig' as gm %}
+
+    <ul class="thread-list">
+    {% for thread in threads %}
+            <li>{{_self.threadWidget(thread, inMessageBoard, currentThread)}}</li>
+    {% endfor %}
+    </ul>
+    {% if inMessageBoard   %}
+        {% set nextFirstResult = threads.query.firstResult + threads.query.maxResults %}
+        {{ gm.showMoreLink(threads, null,path('farola_message_thread_more_ajax', {'category':category,'firstResult':nextFirstResult})) }}
+    {% endif %}
+{% endmacro %}
+
+{% macro threadWidget(thread, inMessageBoard, currentThread) %}
+    {% set otherParticipant = mh.otherParticipant(thread,ph.currentUserProfile()) %}
+    {% if currentThread and (thread.id == currentThread.id) %}
+        {% set threadClass = 'frl-thread-selected' %}
+    {% else %}
+        {% set isRead = mh.isRead(thread, ph.currentUserProfile) %}
+        {% set threadClass = 'frl-thread ' ~ (isRead ? '' : 'frl-thread-unread' )%}
+    {% endif %}
+    {% if inMessageBoard %}
+        {% set onclick = "farolaCommon.getContentRequest('" ~ path('farola_message_list_ajax', {'threadId': thread.id })~ "', $('#messages'));$('.frl-thread-selected').toggleClass('frl-thread-selected frl-thread');$(this).toggleClass('frl-thread frl-thread-selected');$(this).removeClass('frl-thread-unread');" %}
+    {% else %}
+        {% if thread.category == 0 %}
+            {% set onclick = 'window.location="'~path('farola_message_board', {'category':'general'})~'"' %}
+        {% else %}
+            {% set onclick = 'window.location="'~path('farola_message_board', {'category':'notice'})~'"' %}
+        {% endif %}
+    {% endif %}
+    
+    <div  class="media {{threadClass}}" onclick="{{onclick}}">
+        <a class="pull-left" href="{{ path('farola_profile_show', {'profileId': otherParticipant.id})}}">
+            <img class="media-object img-circle " src="{{ ph.profilePictureUrl(otherParticipant) }}" width="30" Length="30" >
+       </a>
+        <div class="media-body">
+            <h4 class="media-heading">with {{ otherParticipant.name|capitalize }} <small><i> {{thread.lastMessageAt|date("F jS Y") }}</i></small></h4>  
+            <p> {{thread.lastMessageBodyShort}} </p>
+        </div> 
+    </div>
+{% endmacro %}

@@ -1,0 +1,42 @@
+{% extends 'bootstrap_3_layout.html.twig' %}
+
+{% block farola_notice_onlineOrLocation_search_widget -%}
+	
+	{% set checked = form.onlineService.vars.checked %}
+
+	<div id="{{ form.location.vars.id }}-div" {% if checked %}style='display:none'{% endif %}>
+		{{ form_row(form.location) }}
+	</div>
+
+	{% if form.profile_country is defined %}
+		<div id="{{ form.profile_country.vars.id }}-div" {% if checked  == false %}style='display:none'{% endif %}>
+			{{ form_row(form.profile_country) }}
+		</div>
+	{% endif %}
+
+	<div class="checkbox">
+	    <label>
+	      <input type="checkbox" id="{{ form.onlineService.vars.id}}" name="{{ form.onlineService.vars.full_name}}" onchange="toggleSearch(this)" {% if checked %}checked {% endif %}> {{ form.onlineService.vars.label }}
+	    </label>
+	 </div>
+
+	<script>
+		function toggleSearch(checkerFieldElt) {
+			if (checkerFieldElt.checked) {
+				$('#{{ form.location.vars.id }}-div').hide();
+				{% if form.profile_country is defined %}
+					$('#{{ form.profile_country.vars.id }}-div').show();
+				{% endif %}
+
+			}
+			else
+			{
+				{% if form.profile_country is defined %}
+					$('#{{ form.profile_country.vars.id }}-div').hide();
+				{% endif %}
+				$('#{{ form.location.vars.id }}-div').show();
+			}
+		}	
+	</script>
+{%- endblock farola_notice_onlineOrLocation_search_widget %}
+

@@ -1,0 +1,71 @@
+{% import '::global_macros.html.twig' as gm %}
+{% import 'FarolaProfileBundle:Content:m-profile.html.twig' as nm %}
+
+{% macro review_rating (rating) %}
+    {% if rating == 1 %}
+        <span class="label label-success"><span class="fa fa-check-circle fa-lg"></span></span>
+    {% elseif rating == 2 %}
+        <span class="label label-success"><span class="fa fa-check-circle fa-lg"></span> <span class="fa fa-check-circle fa-lg"></span></span>
+    {% elseif rating == 3 %}
+        <span class="label label-success"><span class="fa fa-check-circle fa-lg"></span> <span class="fa fa-check-circle fa-lg"></span> <span class="fa fa-check-circle fa-lg"></span></span>
+    {% endif %}
+{% endmacro %}
+
+{% macro review_widget_l1(review, picDirUrl, visitor) %}
+{% import '::global_macros.html.twig' as gm %}
+
+<div class="media frl-review-l1">
+    <a class="pull-left" href="{{ path('farola_profile_show', { 'profileId':review.writer.id })}}">
+        <img class="media-object img-circle" src="{{ picDirUrl }}/{{review.writer.profilePictureFilename }}" width="30" Length="30" >
+    </a>
+    <div class="media-body">
+        <h4 class="media-heading">{{ review.writer.name }} <small><i> {{review.createdAt|date("F Y") }}</i></small> {{ _self.review_rating(review.rating) }}
+        {% if review.writer.id == visitor.id %}
+            {{ gm.supprLink( path('farola_profile_delete_review_ajax', { 'reviewId':review.id }), path('farola_profile_show', { 'profileId':review.subject.id, 'tabId':'review'})) }}
+        {% endif %}
+        </h4>  
+        <p>{{ review.review|trim  }}</p>
+        
+        {% if (review.backReview) %}
+            {{ _self.review_widget_l2(review.backReview, picDirUrl, visitor) }}
+        {% endif %}
+    </div>
+</div>
+{% endmacro %}
+
+{% macro review_widget_l2(review, picDirUrl, visitor) %}
+{% import '::global_macros.html.twig' as gm %}
+
+<div class="media frl-review-l2">
+    <a class="pull-left" href="{{ path('farola_profile_show', { 'profileId':review.writer.id })}}">
+        <img class="media-object img-circle" src="{{ picDirUrl }}/{{review.writer.profilePictureFilename }}" width="30" Length="30" >
+    </a>
+    <div class="media-body">
+        <h4 class="media-heading">{{ review.writer.name }} <small><i> {{review.createdAt|date("F Y") }}</i></small>  {{ _self.review_rating(review.rating) }}
+        {% if review.writer.id == visitor.id %}
+            {{ gm.supprLink( path('farola_profile_delete_review_ajax', { 'reviewId':review.id }), path('farola_profile_show', { 'profileId':review.subject.id, 'tabId':'review'})) }}
+        {% endif %}
+        </h4>  
+        <p>{{ review.review|trim }}</p>
+    </div>
+</div>
+{% endmacro %}
+
+
+{% if ph.isUserProfile(profile) == false and hasReviewed == false %}
+    <div class="row">
+        <div class="col-md-offset-1 col-md-10" style="margin-top:20px" >
+            <p>Do you know {{ profile.name }} ? If you do, you can <a href="javascript:void(0)" data-toggle="modal" data-target="#review-modal">leave a review </a> and help the community know more about this person.</p>
+        </div>
+    </div>
+{% endif %}
+
+ {% for review in pagReviews %}
+    <div class="row">
+        <div class="col-md-offset-1 col-md-10" style="margin-top:20px" >
+        {{ _self.review_widget_l1(review, ph.profilePictureDirectoryUrl(),visitor) }}
+        </div>
+    </div>
+{% endfor %}
+{% set nextFirstResult = pagReviews.query.firstResult + pagReviews.query.maxResults %}
+{{ gm.showMoreLink(pagReviews, null,path('farola_profile_show_review_more_ajax', {'profileId':profile.id,'firstResult':nextFirstResult})) }}

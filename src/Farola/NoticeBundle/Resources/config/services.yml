@@ -1,0 +1,8 @@
+services:
+    farola_notice.helper:
+        class: Farola\NoticeBundle\Entity\NoticeHelper
+        arguments: ["@doctrine.orm.entity_manager","@security.context"]
+
+    farola_notice.entity.notice_manager:
+        class: Farola\NoticeBundle\Entity\NoticeManager
+        arguments: ["@doctrine.orm.entity_manager","@lexik_currency.converter","@farola_profile.helper"]

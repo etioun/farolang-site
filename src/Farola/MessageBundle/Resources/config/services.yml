@@ -1,0 +1,4 @@
+services:
+    farola_message.helper:
+        class: Farola\MessageBundle\Entity\MessageHelper
+        arguments: ["@doctrine.orm.entity_manager"]

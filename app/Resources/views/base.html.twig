@@ -1,0 +1,64 @@
+{% import 'FarolaMainBundle:Common:m-navbar.html.twig' as mnv %}
+{% import '::global_macros.html.twig' as gm %}
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {{ gm.og_metatags() }}
+        <title>{% block title %}Farolang{% endblock %}</title>
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('front/vendor/bootstrap/css/bootstrap.min.css')}}">
+            {# <link rel="stylesheet" href="{{ asset('front/vendor/bootstrap/css/bootstrap-theme.min.css')}}"> #}
+            <link rel="stylesheet" href="{{ asset('front/vendor/typeaheadjs.css')}}">
+            <link rel="stylesheet" href="{{ asset('front/farola/css/extend-bootstrap.css')}}">
+            <link rel="stylesheet" href="{{ asset('front/farola/css/farola-hacks.css')}}">
+            <link rel="stylesheet" href="{{ asset('front/farola/css/farola.css')}}">
+            <link rel="stylesheet" href="{{ asset('front/farola/css/farola-fonts.css')}}">
+            <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        {% endblock %}
+        {# {% stylesheets 'front/farola/*.css' %}
+            <link rel="stylesheet" href="{{ asset_url }}" />
+        {% endstylesheets %} #}
+        <link rel="icon" type="image/png" href="{{ asset('front/farola/images/farola-favicon4.png') }}" />
+    </head>
+    {#  f7f7f7 f0f7fd#}
+    <body class="frl-body">
+        {% block navbar %}
+            {% set qsDefault = (qsDefault is defined) ? qsDefault : null %}
+            {{ mnv.navbar(qsDefault) }}
+        {% endblock navbar %}
+        {% block flash %}
+            {% set flashMsgs = app.session.flashBag.all %}
+            {% if  flashMsgs %}
+                <div class="container-fluid">
+                   {% for type, messages in flashMsgs if ((type == 'success') or (type == 'error')) %}
+                        {% for message in messages %}
+                            {% set alert_class = '' %}
+                            {% if type == 'success' %}
+                                {% set alert_class = 'alert-success' %}
+                            {% elseif type == 'error' %}
+                                {% set alert_class = 'alert-danger' %}
+                            {% endif %}
+                            <div class="alert {{ alert_class }}">
+                                <button  class="close" data-dismiss="alert">&times;</button>
+                                {{ message|trans({}, 'FarolaProfileBundle') }}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endblock %}
+        {% block body %}{% endblock %}
+        {% block javascripts %}
+            <script src="{{asset('front/vendor/jquery-2.1.1.min.js')}}"></script>
+            <script src="{{asset('front/vendor/bootstrap/js/bootstrap.min.js')}}"></script>
+            <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&amp;sensor=false"></script>
+            <script type="text/javascript" src="{{asset('front/vendor/typeahead.bundle.min.js')}}"></script>
+             <script type="text/javascript" src="{{asset('front/vendor/typeahead-addresspicker.min.js')}}"></script>
+            <script type="text/javascript" src="{{asset('front/farola/js/farola-common.js')}}"></script>
+        {% endblock %}
+    </body>
+</html>

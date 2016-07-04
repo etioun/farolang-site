@@ -1,0 +1,7 @@
+{% import '::global_macros.html.twig' as gm %}
+{% import 'FarolaNoticeBundle:Common:m-notice.html.twig' as nm %}
+
+{{ nm.notice_list(pagNotices, false)}}
+
+{% set nextFirstResult = pagNotices.query.firstResult + pagNotices.query.maxResults %}
+{{ gm.showMoreLink(pagNotices, searchForm.vars.full_name, path('farola_notice_board_more_ajax', {'searchType': searchType,'firstResult':nextFirstResult})) }}

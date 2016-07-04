@@ -1,0 +1,59 @@
+{% extends 'FarolaNoticeBundle:Common:content-notice-widget-base.html.twig' %}
+{% import '::global_macros.html.twig' as gm %}
+{% import 'FarolaNoticeBundle:Common:m-widget-content.html.twig' as mwc %}
+
+
+
+{% block main_right %}
+
+ {% if notice.localPrice > 0 %}
+  <div class="row">
+    <div class="panel panel-primary frl-margin-bottom-xs frl-price-panel">
+     <div class="panel-heading text-center" >{{ notice.localPrice | localizedcurrency(notice.localCurrency, noticeProfile.user.prefLocale)}} per hour
+     </div>
+     {% if app.user and (notice.localCurrency != app.user.prefCurrency) %}
+      <div class="panel-footer  text-center">&asymp; {{ notice.localPrice | currency_convert_format(app.user.prefCurrency,true , true,notice.localCurrency)}} per hour</div>
+    {% endif %}
+  </div> 
+</div>
+{% else %}
+    {% if showMode == false %}
+      {{ gm.viewNoticeButton(notice,'btn-block') }}
+      {% else %}
+      
+      {% if app.user %}
+        {{ gm.sendReplyButton(notice.id ~ '-reply','Reply to ' ~ noticeProfile.name ~ ' about this notice', path('farola_message_notice_put_ajax', {'noticeId': notice.id}), path('farola_message_board',{'category': 'notice'}), 'btn-block', nh.isUserNotice(notice)) }}
+      {% else %}
+        {{ gm.sendReplyButtonFake('btn-block', path('farola_notice_show_with_login', {'noticeId':notice.id })) }}
+      {% endif %}
+      {{ gm.viewProfileButton(noticeProfile,'btn-block') }}
+    {% endif %}
+  {% endif %}
+  <div class="text-center" >
+    <a href="#" data-toggle="modal" data-target="#{{notice.id}}-avail">Show availability</a>
+  </div>
+{% endblock main_right %}
+
+{% block bottom_row %}
+  {% if notice.localPrice > 0 %}
+   <div class="col-md-8">
+    {{ mwc.description(notice, showMode) }}
+    </div>
+    <div class="col-md-3">
+      {% if showMode == false %}
+        {{ gm.viewNoticeButton(notice,'btn-block') }}
+        {% else %}
+          {% if app.user %}
+            {{ gm.sendReplyButton(notice.id ~ '-reply','Reply to ' ~ noticeProfile.name ~ ' about this notice', path('farola_message_notice_put_ajax', {'noticeId': notice.id}), path('farola_message_board',{'category': 'notice'}), 'btn-block', nh.isUserNotice(notice)) }}
+          {% else %}
+            {{ gm.sendReplyButtonFake('btn-block', path('farola_notice_show_with_login', {'noticeId':notice.id })) }}
+          {% endif %}
+          {{ gm.viewProfileButton(noticeProfile,'btn-block') }}
+        {% endif %}
+      </div>
+  {% else %}
+    <div class="col-md-11">
+    {{ mwc.description(notice, showMode) }}
+    </div>
+  {% endif %}
+{% endblock bottom_row %}

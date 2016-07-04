@@ -1,0 +1,26 @@
+{
+	"0" : 
+	{
+		"url-code" : "teacher",
+		"name" : "I'm a teacher and I am looking for students",
+		"quicksearch" : "Find teachers"
+	},
+	"1" : 
+	{
+		"url-code" : "student",
+		"name" : "I want to learn with a teacher",
+		"quicksearch" : "Find students"
+	},
+	"2" : 
+	{
+		"url-code" : "language-partner",
+		"name" : "I am looking for a language partner",
+		"quicksearch" : "Language partners"
+	},
+	"3" : 
+	{
+		"url-code" : "other",
+		"name" : "I am looking for or I propose something special (events, books, anything...)",
+		"quicksearch" : "Other notices"
+	}
+}

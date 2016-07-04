@@ -1,0 +1,19 @@
+{
+	"teach-learn":
+	{
+		"child" : "Children",
+		"teen" : "Teenagers",
+		"exam" : "Exam preparation",
+		"begin" : "Beginners"
+	},
+	"other" :
+	{
+		"trans" : "Translation",
+		"interp" : "Interpretation",
+		"buy" : "Buy",
+		"sell" : "Sell",
+		"event" : "Event",
+		"meet" : "Meet people"
+	}
+
+}

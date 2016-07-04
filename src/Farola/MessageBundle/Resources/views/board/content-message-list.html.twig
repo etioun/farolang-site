@@ -1,0 +1,38 @@
+{% import '::global_macros.html.twig' as gm %}
+{% set otherParticipant = mh.otherParticipant(currentThread,usrProfile) %}
+
+{% if pagMessages.query.firstResult == 0 %}
+	<div>
+		<span>
+			<button onclick="farolaCommon.sendChangeRequest('{{ path('farola_profile_ignore_ajax',{ 'profileId':otherParticipant.id}) }}','{{ path('farola_message_board')}}')" type="button" class="btn btn-danger btn-xs frl-rounded-sm pull-right frl-margin-bottom-xs"><span class="glyphicon glyphicon-eye-close"></span> Ignore</button>
+			</span>
+		<div class="btn-group">
+		{{ gm.sendMsgButton('msg-modal','Say something to ' ~ otherParticipant.name, path('farola_message_thread_message_put_ajax',{'threadId':currentThread.id})) }}
+
+		{% if currentThread.notice %}
+			{{ gm.viewNoticeButton2(currentThread.notice)}}
+		{% endif %}
+		 <a class="btn btn-primary frl-rounded-lg" href="{{ path('farola_profile_contact')}}"> <span class="fa fa-book"></span> Contact book</a>
+		</div>
+		
+	</div>
+{% endif %}
+
+{% for message in pagMessages %}
+	{% set msgClass = '' %}
+	{% if message.sender.id == usrProfile.id%}{% set msgClass = 'frl-msg-blue' %}{% endif %}
+	<div class="media">
+        <a class="pull-left" href="{{ path('farola_profile_show', {'profileId': message.sender.id})}} ">
+            <img class="media-object img-circle" src="{{ ph.profilePictureUrl(message.sender) }}" width="30" Length="30" >
+        </a>
+        <div class="media-body">
+            <h4 class="media-heading ">{{ message.sender.name }} <small><i> {{message.createdAt|date("F jS Y h:i") }}</i></small></h4>
+            <p class="frl-msg  {{msgClass}}">{{message.body}}</p>
+        </div> 
+    </div>
+{% endfor %}
+{% set nextFirstResult = pagMessages.query.firstResult + pagMessages.query.maxResults %}
+{{ gm.showMoreLink(pagMessages, null,path('farola_message_list_ajax', {'threadId':currentThread.id,'firstResult':nextFirstResult})) }}
+
+ 
+

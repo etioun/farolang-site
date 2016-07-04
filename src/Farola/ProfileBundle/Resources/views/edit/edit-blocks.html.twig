@@ -1,0 +1,19 @@
+{% extends 'bootstrap_3_layout.html.twig' %}
+
+{% block form_label_class -%}
+
+{%- endblock form_label_class %}
+
+{% block farola_profilebundle_spokenlanguage_widget -%}
+	<div id="{{ form.vars.id }}" class="form-inline form-group">
+        {{ form_widget(form.language) }}
+        {{ form_widget(form.level) }}    
+    </div> 
+{% endblock farola_profilebundle_spokenlanguage_widget -%}
+
+{% block farola_profilebundle_weblink_widget -%}
+	<div id="{{ form.vars.id }}" class="form-inline form-group">
+        {{ form_widget(form.title,{'attr':{ 'placeholder': 'Link title..'}}) }}
+        {{ form_widget(form.link,{'attr':{ 'placeholder':'Paste link..'}}) }}   
+    </div> 
+{% endblock farola_profilebundle_weblink_widget -%}

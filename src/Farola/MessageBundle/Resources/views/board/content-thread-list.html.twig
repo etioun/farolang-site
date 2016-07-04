@@ -1,0 +1,4 @@
+{% import '::global_macros.html.twig' as gm %}
+{% import 'FarolaMessageBundle:Common:m-thread.html.twig' as mt %}
+
+{{ mt.threadList(pagThreads, true, currentThread, category)}}

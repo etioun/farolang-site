@@ -1,0 +1,55 @@
+{% block farola_tag_widget -%}
+
+	{% set nsp = form.vars.id %}
+
+	<a href="javascript:void(0)" onclick="{{nsp}}_initTags();$('#{{nsp}}_modal').modal();">Select tags</a>
+
+	<h4>
+		<div id="{{nsp}}_tag-div" style="line-height:30px;">
+			{% for key, name in form.vars.dataTags %}
+				<span class="label label-success frl-margin-bottom-xs" style="margin-right:2px;" id="{{nsp}}_{{ key }}">{{ name }}</span>
+			{% endfor %}
+		</div>
+	</h4>
+
+	<div class="modal fade" id="{{nsp}}_modal" data-keyboard="false" tabindex="-1"  >
+	  <div class="modal-dialog  modal-sm">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal"><span >&times;</span><span class="sr-only">Close</span></button>
+	        <h4 class="modal-title" >Select some tags</h4>
+	      </div>
+	      <div class="modal-body">
+	        {{ block('choice_widget') }}
+	      </div>
+	      <div class="modal-footer">
+	        <button  type="button" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<script type="text/javascript">
+		{{nsp}}_initialized = false;
+
+		function {{nsp}}_initTags(){
+			if ({{nsp}}_initialized == false){
+				$('#{{form.vars.id}} input[type="checkbox"]').on('change', {{nsp}}_addRemoveTags);
+				{{nsp}}_initialized=true;
+			}
+		}
+
+		function {{nsp}}_addRemoveTags(){
+			if (this.checked)
+			{
+				tag = '<span class="label label-success" style="margin-right:2px;" id="{{nsp}}_'+$(this).val()+'">'+$(this).parent().text()+'</span> '
+				$('#{{nsp}}_tag-div').append(tag);
+			}
+			else
+			{
+				div = $('#{{nsp}}_tag-div #{{nsp}}_'+$(this).val());
+				div.hide('slow', function(){ div.remove(); });
+			}
+		}
+	</script>
+{% endblock farola_tag_widget -%}

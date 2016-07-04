@@ -1,0 +1,107 @@
+{% extends '::base.html.twig' %}
+{% import 'FarolaNoticeBundle:Common:m-notice.html.twig' as nm %}
+{% import 'FarolaMessageBundle:Common:m-thread.html.twig' as mt %}
+{% import 'FarolaMainBundle:Common:m-quicksearch.html.twig' as mqs %}
+
+
+{% block title %}Farolang - Home{% endblock %}
+
+{% block body %}
+
+ {# <div class="page-header">
+    <h2 class="h2 text-center frl-no-margin">¡ Welcome {{profile.name}} !</h2>
+</div> #}
+<div class="container ">
+     <div class="row alert ">
+        <div class="col-md-offset-2 " style="vertical-align:middle;">
+           <span style="margin-left:auto;margin-right:auto;">
+                <a href="{{ path('farola_profile_show', { 'profileId' : ph.currentUserProfile.id }) }}" class="btn btn-lg ">My profile</a>
+                <a href="{{path('farola_notice_my_list')}}" class="btn btn-lg ">Manage my notices</a>
+                <a href="{{path('farola_user_preference')}}" class="btn btn-lg ">Preferences and settings</a>
+                <a href="{{path('farola_user_feedback')}}" class="btn btn-lg ">Contact us</a>
+           <span>
+           
+        </div>
+     </div>                 
+    <div style="margin-top:10px" class="row ">
+        <div class="col-md-6 col-lg-6 frl-col-padding-lg">
+            <section>
+                <section>
+                    <div class="panel panel-primary frl-dashboard-panel">
+                       <div class="panel-heading">
+                            <h4>Recent activity in Farolang</h4>
+                        </div>
+                        <div class="panel-body">
+                            {{ nm.notice_list_compact(notices)}}
+                        </div>
+                    </div>
+
+                </section>
+               
+             </section>
+            </div>
+            <div class="col-md-6 frl-col-padding-lg" >
+                     <section>
+                        <div class="panel panel-primary frl-dashboard-panel">
+                             <div class="panel-heading">
+                                <h4>Your last inbox messages</h4>
+                            </div>
+                            <div class="panel-body">
+                                {{mt.threadList(threads, false, null)}}
+                            </div>
+                        </div>
+                    </section>
+                    {#  <h3>Links </h3>
+                    <div class="panel panel-primary frl-dashboard-panel">
+                        <div class="panel-heading">
+                            <h4>Checkout the lamppost</h4>
+                        </div>
+                        <div class="panel-body">
+                            <ul>
+                                <li><a href="{{ path('farola_profile_board') }}">Find other members </a></li>  
+                                <li>
+                                    <a href="{{ path('farola_notice_board_teacher') }}">Teachers looking for students</a>
+                                </li>     
+                                <li>
+                                    <a href="{{ path('farola_notice_board_student') }}">Students looking for teachers</a>
+                                </li>            
+                                <li>
+                                    <a href="{{ path('farola_notice_board_lang_ex') }}">Language exchange</a>
+                                </li>
+                                <li>
+                                 <a href="{{ path('farola_notice_board_other') }}">Other notices</a>
+                             </li>
+                            </ul> 
+                        </div>
+                     </div>      #}
+                 {# <section>
+                    <div class="panel panel-primary frl-dashboard-panel">
+                        <div class="panel-heading">
+                            <h4>Personal things</h4>
+                        </div>
+                        <div class="panel-body">
+                            <ul>
+                                <li>
+                                    <a href="{{ path('farola_profile_show', { 'profileId' : profile.id }) }}">View my profile</a>
+                                </li>
+                                <li><a href="{{ path('farola_notice_my_list') }}">Manage my notices</a></li>
+                                 <li>
+                                   <a href="{{ path('farola_profile_edit') }}">Edit my profile</a>
+                               </li>
+                                <li>
+                                    <a href="{{ path('farola_message_board') }}">Messages</a>
+                                </li>     
+                                <li>
+                                    <a href="{{ path('farola_profile_contact') }}">Contacts</a>
+                                </li>            
+                               <li>
+                                   <a href="{{ path('farola_user_preference') }}">Preferences and settings</a>
+                               </li>
+                           </ul>
+                       </div>
+                    </div>     
+                   </section> #}
+               </div>
+           </div>
+       </div>
+   {% endblock body %}

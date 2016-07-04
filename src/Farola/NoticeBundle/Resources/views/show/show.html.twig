@@ -1,0 +1,27 @@
+{% extends '::base.html.twig'%}
+{% import 'FarolaNoticeBundle:Common:m-notice.html.twig' as mn %}
+{% import '::global_macros.html.twig' as gm %}
+{% import 'FarolaMainBundle:Common:m-navbar.html.twig' as mnv %}
+
+
+{% block title %}Farolang - Notice {% if notice %}{{ notice.id }}{% endif %}  {% endblock %}
+
+{% block navbar %}
+  
+  {% set otherLinks = nh.isUserNotice(notice) ? [{ 'path': path('farola_notice_my_list'), 'name':'My notices'}] : null %} 
+
+  {{ mnv.navbar(null,showGoBack, otherLinks) }}
+{% endblock navbar %}
+
+
+{% block body %}
+        <div class="container">
+          {% if notice %}
+            <div class="row">
+              <div class="col-md-12 col-md-offset-0 frl-show-notice-panel">
+              {{ mn.notice_widget(notice, true, true) }}
+              </div>
+            </div>
+          {% endif %}
+        </div>
+{% endblock %}

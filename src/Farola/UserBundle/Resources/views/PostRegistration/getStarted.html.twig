@@ -1,0 +1,13 @@
+{% extends "FarolaUserBundle::prelogin-base.html.twig" %}
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+
+{% block modal_title %}
+    Welcome on board {{ app.user.username }} ! <br><small>Just fill up a few profile details to get started</small>
+{% endblock modal_title %}
+
+{% block content %}
+        {{form_start(form, {'action': path('farola_user_get_started')})}}
+        {{form_widget(form)}}
+        <input type="submit" class="btn btn-success" value="Done !">
+        {{form_end(form)}}
+{% endblock content %}

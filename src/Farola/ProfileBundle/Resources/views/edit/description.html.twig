@@ -1,0 +1,69 @@
+{% extends 'FarolaProfileBundle:Edit:base.html.twig' %}
+{% import 'FarolaProfileBundle:Content:m-menu-edit.html.twig' as me %}
+{% form_theme editForm 'FarolaProfileBundle:Edit:edit-blocks.html.twig' %}
+
+{% block edit_menu %}
+    {{ me.menu('description') }}
+{% endblock edit_menu %}
+
+
+{% block edit_content %}
+<div id="{{ editForm.vars.id }}-msg"></div>
+
+
+{{ form_start(editForm) }}
+<div class="row form-group">
+    <div class="col-md-2 col-md-offset-5 btn-block">
+        <button type="submit" class="btn btn-success">
+            <span class="fa fa-magic"></span>
+                Update
+        </button>
+     </div>
+</div>
+
+{{ _self.topicTextarea(editForm.aboutMe, 'About me', true) }}
+
+<div class="panel panel-info">
+  <div class="panel-heading">
+    <a data-toggle="collapse" aria-expanded="true" data-target="#{{editForm.weblinks.vars.id}}-collapse" class="panel-title" href="javascript:void(0)"><h5 ><span class="glyphicon glyphicon-chevron-right"></span>You on the web (blog, website, facebook,...) [...]</h5></a>
+  </div>
+    <div id="{{editForm.weblinks.vars.id}}-collapse" class="collapse in">
+        <div class="panel-body" >
+            {{ form_widget(editForm.weblinks) }}
+        </div>
+    </div>
+</div>
+
+{{ _self.topicTextarea(editForm.experience, 'Experience', true) }}
+{{ _self.topicTextarea(editForm.interests, 'Interests', true) }}
+
+<div class="row">
+    <div class="col-md-2 col-md-offset-5 btn-block">
+        <button type="submit" class="btn btn-success">
+            <span class="fa fa-magic"></span>
+                Update
+        </button>
+     </div>
+</div>
+
+{{ form_row(editForm._token) }}
+{{ form_end	(editForm) }}
+
+{% endblock edit_content %}
+
+{% macro topicTextarea(topic, topic_label, expanded) %}
+<div class="panel panel-info">
+  <div class="panel-heading">
+    <a data-toggle="collapse" aria-expanded="{{expanded}}" data-target="#{{topic.vars.id}}-collapse" class="panel-title" href="javascript:void(0)"><h5 ><span class="glyphicon glyphicon-chevron-right"></span>{{ topic_label }} [...]</h5></a>
+  </div>
+  <div id="{{topic.vars.id}}-collapse"  class="collapse in">
+        <div class="panel-body" >
+
+                {{ form_widget(topic, {'attr':{ 'rows':'5','placeholder':'Write something about you here..'}}) }}
+
+
+        </div>
+    </div>
+</div>
+{% endmacro %}
+

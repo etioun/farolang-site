@@ -1,0 +1,272 @@
+{% extends '::base.html.twig' %}
+{% form_theme reviewForm 'bootstrap_3_layout.html.twig' %}
+{% import '::global_macros.html.twig' as gm %}
+{% import 'FarolaNoticeBundle:Common:m-notice.html.twig' as nm %}
+{% import 'FarolaMainBundle:Common:m-navbar.html.twig' as mnv %}
+
+
+{% block title %}Farolang - {{profile.name}} {% endblock %}
+
+{% block navbar %}
+  {% set otherLinks = [{ 'path': path('farola_notice_my_list'), 'name':'Go to my notices'}]  %} 
+
+  {{ mnv.navbar(null,showGoBack, otherLinks) }}
+{% endblock navbar %}
+
+
+{% block body %}
+{% set activeNotices = nh.notices(profile, true) %}
+
+<div class="container" role="main">
+     <div class="row">
+        <div class="col-md-10 col-md-offset-1 frl-no-padding ">
+               <div class="row">
+                    {% if ph.isUserProfile(profile)%}
+                        <a class="btn btn-success frl-rounded-lg" href="{{ path('farola_profile_edit') }}"><span class="glyphicon glyphicon-cog"></span>  Edit my profile...</a>
+                    {% elseif ph.hasIgnored(visitor, profile) %}
+                        <button onclick="farolaCommon.sendChangeRequest('{{ path('farola_profile_cancel_ignore_ajax',{ 'profileId':profile.id}) }}','reload')" type="button" class="btn btn-warning frl-rounded-lg"><span class="glyphicon glyphicon-eye-open"></span> Do not ignore {{ profile.name }} anymore</button>
+                    {% else %}
+                    <div class="btn-group">
+                        {{ gm.sendMsgButton(profile.id ~ '-msg-modal','Send a message to '~ profile.name, path('farola_message_profile_message_put_ajax', {'profileId':profile.id}),path('farola_message_board'), '') }}
+                        {% if ph.hasContact(visitor, profile) == false %}
+                            {% set addContactUrl = path('farola_profile_add_contact_ajax', {'profileId':profile.id}) %}
+                            <button onclick="farolaCommon.sendChangeRequest('{{ addContactUrl }}','{{ path('farola_profile_show',{ 'profileId':profile.id})}}')" class="btn btn-primary frl-rounded-lg" >
+                                    <span class="fa fa-book" ></span>
+                                            Add in my contact book
+                            </button>
+                        {% else %}
+                            <button class="btn btn-success frl-rounded-lg" disabled="disabled"  >
+                                <span class="fa fa-book" ></span>
+                                {{ profile.name }} is in your contact book
+                            </button>
+                         {% endif %}
+                         {% if hasReviewed == false %}
+                            <button class="btn btn-primary frl-rounded-lg"  data-toggle="modal" data-target="#review-modal" >
+                                <span class="glyphicon glyphicon-edit" ></span>
+                                Leave a review
+                            </button>
+                        {% else %}
+                            <div class="btn btn-success frl-rounded-lg" disabled="disabled"  >
+                                <span class="glyphicon glyphicon-edit" ></span>
+                                You left a review
+                            </div>
+                         {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            <div class="frl-profile-general">
+                <div class="row">
+                    <h3 class="frl-margin-top-xs"> {{ profile.name }} </h3></h3>
+                </div>
+                <div class="row">
+                 <p >
+                    {{ ph.formatedMetadata(profile)|raw }}
+                 </p>
+                </div>
+                {% if profile.address %}
+                   <div class="row">
+                    <span class="glyphicon glyphicon-map-marker"></span> <b>{{ profile.address}}</b>
+                   </div>
+                {% endif %}
+                {% if profile.spokenLanguages %}
+                   <div class="row">
+                    <span class="fa fa-comments"></span>
+                    {% for languageLvl in ph.languageLvlArr(profile) %}
+                      {{ gm.languageLvl_widget(languageLvl) }}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+                <div class="thumbnail frl-no-border" style="position: absolute;top: 10px;right: 20px;z-index:2;">
+                <img src="{{ ph.profilePictureUrl(profile) }}" width="200" Length="200" >
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid frl-margin-top-sm" style="padding-bottom:10px;">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 frl-profile-cats">
+            {# <ul style="padding-left: 2%;padding-right: 2%;padding-top: 2%;" class="nav nav-pills nav-justified" role="tablist">
+                {% set descriptionActive = '' %}
+                {% set reviewActive = '' %}
+                {% set noticeActive = '' %}
+                {% if tabId == 'description' %}
+                    {% set descriptionActive = 'active' %}
+                {% elseif tabId == 'review' %}
+                    {% set reviewActive = 'active' %}
+                {% elseif tabId == 'notice'%}
+                    {% set noticeActive = 'active' %}
+                {% endif %}
+
+                <li class="{{ descriptionActive }}" ><a data-target="#description" aria-controls="description" role="tab" data-toggle="tab">Description</a></li>
+                <li class="{{ reviewActive }}"><a data-target="#reviews" aria-controls="reviews" role="tab" data-toggle="tab">Reviews <span  class="badge">{{ profile.aggReviewCount }}</span></a></li>
+                <li class="{{ noticeActive }}"><a  data-target="#notices" aria-controls="notices" role="tab" data-toggle="tab">Notices  <span class="badge">{{ activeNotices|length }}</span></a></a></li>
+            </ul> #}
+            {# <div style="min-height:400px" class="tab-content frl-margin-top-sm"> #}
+                <div role="tabpanel" class="tab-pane " id="description">
+                    {% if profile.aboutMe %}
+                        <div class="row frl-profile-cat">
+                            <div class="col-md-offset-1 col-md-10">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <hr class="frl-profile-hr">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h4 style="">About {{ profile.name }} </h4>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <hr class="f">
+                                    </div>
+                                </div>
+                                <p class="frl-profile-p-cat">{{ profile.aboutMe }}</p>
+
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if profile.weblinks %}
+                        <div class="row frl-profile-cat">
+                            <div class="col-md-offset-1 col-md-10">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <hr class="frl-profile-hr">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h4 style="">Weblinks</h4>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <hr class="">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                <ul>
+                                {% for weblink in profile.weblinks %}
+                                    <li><label>{{ weblink.title }} </label>
+                                    <a target="_blank" href="//{{ weblink.link }}">{{ weblink.link }}</a>
+                                    </li>
+                                {% endfor %}
+                                </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    {% endif %}
+                    {% if profile.interests %}
+                        <div class="row frl-profile-cat">
+                            <div class="col-md-offset-1 col-md-10">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <hr class="frl-profile-hr">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h4 style="">Interests</h4>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <hr>
+                                    </div>
+                                </div>
+                                <p class="frl-profile-p-cat">{{ profile.interests }}</p>
+                                
+                            </div>
+                        </div>
+                        
+                    {% endif %}
+                    {% if profile.experience %}
+                        <div class="row frl-profile-cat">
+                            <div class="col-md-offset-1 col-md-10">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <hr class="frl-profile-hr">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h4 style="">Education and experience </h4>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <hr>
+                                    </div>
+                                </div>
+                                <p class="frl-profile-p-cat">{{ profile.experience }}</p>
+                                
+                            </div>
+                        </div>
+                        
+                    {% endif %}
+                </div>
+                 <div role="tabpanel" class="tab-pane " id="reviews">
+                    <div class="row frl-profile-cat">
+                        <div class="col-md-offset-1 col-md-10">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <hr class="frl-profile-hr">
+                                </div>
+                                <div class="col-md-4">
+                                    <h4 style=" ">Reviews <span style="vertical-align:middle;background-color:rgb(51, 122, 183);" class="badge">{{ profile.aggReviewCount }}</span> </h4>
+                                </div>
+                                <div class="col-md-4">
+                                    <hr>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% include 'FarolaProfileBundle:Show:content-review-list.html.twig' %}
+                </div>
+                <div role="tabpanel" class="tab-pane " id="notices">
+                    <div class="row frl-profile-cat">
+                        <div class="col-md-offset-1 col-md-10">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <hr class="frl-profile-hr">
+                                </div>
+                                <div class="col-md-4">
+                                    <h4 style="">Notices <span style="vertical-align:middle;background-color:rgb(51, 122, 183);" class="badge">{{ activeNotices|length }}</span> </h4>
+                                </div>
+                                <div class="col-md-4">
+                                    <hr class="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{ nm.notice_list(activeNotices,false, 'frl-search-results-no-border')}}
+                </div>
+            {# </div> #}
+        </div>
+    </div>
+</div>
+
+
+ {% if hasReviewed == false %}
+     <div class="modal fade" id="review-modal" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="review-modal-Label" aria-hidden="true" >
+      <div class="modal-dialog  modal-md">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="review-modal-Label">Say something on {{ profile.name }}</h4>
+          </div>
+          <div class="modal-body">
+            {{ form_start(reviewForm) }}
+                {{form_widget(reviewForm.review, {'attr':{'class':'frl-focusme', 'rows':5}})}}
+                <div class="form-inline frl-margin-top-xs">
+                    {{form_label(reviewForm.rating)}}
+                    {{form_widget(reviewForm.rating)}}
+                </div>
+            {{ form_end(reviewForm) }}
+          </div>
+          <div class="modal-footer">
+            <button  type="button" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" onclick="submitReview()" class="btn btn-success" data-dismiss="modal">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+        function submitReview()
+        {
+           {% set fct= "farolaCommon.postDataRequest($(\'[name=\"_formName_\"]\'), '_url_','_urlRedirect_');"|replace({'_formName_': reviewForm.vars.full_name, '_url_': path('farola_profile_put_review_ajax',{'profileId':profile.id}),'_urlRedirect_': path('farola_profile_show',{'profileId':profile.id, 'tabId':'review'})}) %}
+           {{fct|raw}}
+            // $("[name='{{reviewForm.vars.id}}']").submit();
+        }
+    </script>
+{% endif %}
+
+{% endblock body %}
+

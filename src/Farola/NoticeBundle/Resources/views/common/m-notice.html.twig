@@ -1,0 +1,61 @@
+{% import '::global_macros' as gm %}
+
+{% macro notice_list(notices, editionMode, cssClass) %}  
+  <ul class="frl-search-results {{cssClass}}">
+  {% for notice in notices %}
+    <li>{{ _self.notice_widget(notice, editionMode) }}</li>
+  {% endfor %}
+</ul>
+{% endmacro %}
+
+{% macro notice_list_compact(notices) %}  
+  <ul class="frl-compact-results">
+  {% for notice in notices %}
+    <li>{% include 'FarolaNoticeBundle:Common:content-notice-widget-compact.html.twig' %}</li>
+  {% endfor %}
+</ul>
+{% endmacro %}
+
+{% macro notice_widget(notice, editionMode, showMode) %}
+  {% if (nh.isCategory(notice, 'teacher')) %}
+    {% include 'FarolaNoticeBundle:Common:content-teacher-widget.html.twig' %}
+  {% elseif (nh.isCategory(notice, 'student')) %}
+    {% include 'FarolaNoticeBundle:Common:content-student-widget.html.twig' %}
+  {% elseif (nh.isCategory(notice, 'language-partner')) %}
+    {% include 'FarolaNoticeBundle:Common:content-lang-ex-widget.html.twig' %}
+  {% elseif (nh.isCategory(notice, 'other')) %}
+    {% include 'FarolaNoticeBundle:Common:content-other-widget.html.twig' %}
+  {% endif %}
+{% endmacro  %}
+
+{% macro newNoticeCategorySelector(displayType) %}
+  {% if displayType == "new_notice" %}
+    {% set label = '<label><span class="glyphicon glyphicon-flash" style="color:rgb(87, 177, 87);"></span> New notice </label>' %}
+    {% set btn = '<button class="btn btn-success frl-rounded-lg" onclick="goToCreatePage()"><span class="fa fa-plus-circle"></span></button>' %}
+  {% elseif displayType == "choose_category" %}
+    {% set label = '<label>Choose a category </label>' %}
+    {% set btn = '<button class="btn btn-success frl-rounded-lg" onclick="goToCreatePage()">Go !</button>' %}
+  {% elseif displayType == "choose" %}
+    {% set label = '<label>Choose </label>' %}
+    {% set btn = '<button class="btn btn-success frl-rounded-lg" onclick="goToCreatePage()">Continue <span class="glyphicon glyphicon-menu-right"></span></button>' %}
+  {% endif %}
+
+
+  <div class="form-inline">
+           {{label|raw}}
+              <select id="createCategorySelector" class="form-control" >
+                  {% for category in nh.noticeCategories() %}
+                      <option value="{{ category['url-code'] }}"> {{ category['name']}} </option>
+                  {% endfor %}
+              </select>
+              {{btn|raw}}
+      </div>
+
+      <script type="text/javascript">
+          function goToCreatePage() {
+              url = "{{ path('farola_notice_new') }}/"+$('#createCategorySelector').val();
+
+              window.location.href=url;
+          }
+      </script>
+{% endmacro %}

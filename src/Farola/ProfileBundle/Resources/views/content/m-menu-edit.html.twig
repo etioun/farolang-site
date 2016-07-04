@@ -1,0 +1,22 @@
+
+
+{% macro menu(selectedTab) %}  
+  <ul class="nav nav-pills nav-stacked" role="tablist">
+      {{ _self.renderItem(selectedTab, 'general', 'General') }}
+      {{ _self.renderItem(selectedTab, 'picture', 'Profile picture') }}
+      {{ _self.renderItem(selectedTab, 'description', 'More about me') }}
+  </ul>
+{% endmacro  %}
+
+{% macro renderItem(selectedTab, currentTab, currentTabName) %}  
+  {% set activeClass = '' %}
+  {% if selectedTab == currentTab %}
+    {% set activeClass = 'active' %}
+  {% endif %}
+  {% set link = path('farola_profile_edit',{'tabId':currentTab}) %}
+  {% if selectedTab == currentTab %}
+    {% set link = 'javascript:void(0)' %}
+  {% endif %}
+  <li class="{{activeClass}}"><a href="{{link}}">{{currentTabName}}</a></li>
+
+{% endmacro  %}

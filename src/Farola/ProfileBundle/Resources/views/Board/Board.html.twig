@@ -1,0 +1,27 @@
+{% extends '::base.html.twig' %}
+{% form_theme searchForm 'bootstrap_3_layout.html.twig' %}
+
+{% block title %}Farolang - Profile search {% endblock %}
+
+
+{% block body %}
+<div class="container" role="main">
+    <div class="row">
+        <div class="col-md-3 frl-search-panel">
+            {{ form_start(searchForm) }}
+            {{ form_widget(searchForm) }}
+            <div class="text-center">
+             <button type="submit" class="btn btn-primary frl-rounded-lg"><span class="glyphicon glyphicon-search" ></span> Search</button>
+            </div>
+            {{ form_end(searchForm) }}
+        </div>
+        <div class="col-md-9">
+            {% if pagProfiles.count > 0 %}
+                {% include 'FarolaProfileBundle:Board:content-list.html.twig' %}
+            {% else %}
+                <p class="text-center"> Sorry, there are no matches for this search :( </p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock body %}

@@ -1,0 +1,69 @@
+{% block farola_filterable_select_widget -%}
+	{% set nsp = form.vars.id %}
+
+	 <input type="text" class="form-control" onchange="{{nsp}}_selectModule.clearIfDirty()" onfocus="{{nsp}}_selectModule.initInput()" id="{{nsp}}_input" value="{{form.vars.selectedDataName}}" {%- if form.vars.required %} required="required"{% endif -%} placeholder="{{form.vars.placeholder}}">
+
+	{{ block('hidden_widget') }}
+
+	<script type="text/javascript">
+
+		var {{nsp}}_selectModule = (function(){
+
+			var _dataSource = {
+			{% for code, name in form.vars.dataSource %}
+					"{{code}}":"{{name|raw}}",
+				{% endfor %} };
+
+
+			var _initialized = false;
+			var _lastSelected = '{{form.vars.selectedDataName}}';
+
+			function _storeSelection(event, selection){
+				_lastSelected = selection.name;
+				$('#{{form.vars.id}}').val(selection.code);
+				$('#{{nsp}}_input').change();
+			}
+
+			return {
+				'clearIfDirty': function() {
+					if (_initialized == false)
+						return;
+
+					if (_lastSelected != $('#{{nsp}}_input').typeahead('val'))
+					{
+						_lastSelected = '';
+						$('#{{nsp}}_input').typeahead('val','');
+						$('#{{form.vars.id}}').val('');
+					}
+				},
+
+				'initInput': function(){
+					if (_initialized)
+						return;
+
+					var source = new Bloodhound({
+					  datumTokenizer: Bloodhound.tokenizers.obj.nonword('name'),
+					  queryTokenizer: Bloodhound.tokenizers.nonword,
+					  limit: 5,
+					  local: $.map(_dataSource, function(name, code) {
+					  					return {'name':name, 'code':code};
+					  				})
+					});
+
+					source.initialize();
+
+					//it makes to input loose the focus
+					$('#{{nsp}}_input').typeahead( {highlight: true}, {
+					  displayKey: 'name',
+					  source: source.ttAdapter()
+					})
+					.on('typeahead:selected',  _storeSelection)
+					.on('typeahead:autocomplete',  _storeSelection)
+
+					_initialized = true;
+					$('#{{nsp}}_input').focus();
+				}
+			}
+		}())
+	</script>
+{% endblock farola_filterable_select_widget -%}

@@ -1,0 +1,23 @@
+{% extends '::base.html.twig' %} 
+{% import 'FarolaProfileBundle:Content:m-profile.html.twig' as nm %}
+{% import 'FarolaMainBundle:Common:m-navbar.html.twig' as mnv %}
+
+
+{% block navbar %}
+	{{ mnv.navbar(null,false, [{'path':path('farola_message_board'), 'name': 'Go to my messages'}]) }}
+{% endblock navbar %}
+
+{% block body %}
+   <div class="container" role="main">
+    <div class="row">
+        <div class="col-lg-10 col-lg-offset-1">
+            {% if profiles|length > 0 %}
+                {{ nm.profile_list(profiles, true)}}
+            {% else %}
+                <p> You have no contacts yet </p>
+            {% endif %}
+    	</div>
+    </div>
+</div>
+{% endblock %}
+

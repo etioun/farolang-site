@@ -1,0 +1,10 @@
+services:
+    farola_profile.helper:
+        class: Farola\ProfileBundle\Entity\ProfileHelper
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@kernel"
+            - "@security.context"
+            - "@farola.ref_data.helper"
+            - '%profile_picture.dir.path%'
+            - '%profile_picture.dir.url%'

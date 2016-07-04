@@ -1,0 +1,58 @@
+{% macro wrapWidget(nsp, prototype) %}
+    <div id="{{ prototype.vars.id }}_wrapper" class="form-inline form-group">
+        {{ form_widget(prototype) }}
+        <button type="button" onClick="{{ nsp }}_farolaCollection.remove($(this))" class="btn btn-primary">Remove</button>
+    </div>
+{% endmacro %}
+
+{% block farola_collection_widget -%}
+	
+    {% set nsp = form.vars.id %}
+    {% if form.children|length >= form.vars.maxItems %}
+        {% set addBtnLabel = form.vars.addBtn_label_max %}
+        {% set addBtnDisabled = 'disabled="disabled"' %}
+    {% else %}
+        {% set addBtnLabel = form.vars.addBtn_label %}
+        {% set addBtnDisabled = '' %}
+    {% endif %}
+
+    
+    <div id="{{ nsp }}_div" data-prototype="{{ _self.wrapWidget(nsp, form.vars.prototype) | e}}">
+        {% for child in form.children %}
+           {{ _self.wrapWidget(nsp,child) }}
+        {% endfor %}
+    </div> 
+    <button type="button" id="{{ nsp }}_addBtn" onClick="{{ nsp }}_farolaCollection.add()" class="btn btn-primary" {{ addBtnDisabled }} >{{addBtnLabel}}</button>
+    <script>
+        var {{ nsp }}_farolaCollection=(function(){
+            
+            var _itemCountBase = {{ form.children|length }};
+            var _maxItems = {{ form.vars.maxItems }};
+
+            return {
+                'add' : function(){
+                   var container = $('#{{ nsp }}_div');
+                    var item = container.attr('data-prototype').replace(/__name__/g, _itemCountBase++);
+                    container.append(item); 
+
+                    if (container.children().length == _maxItems)
+                    {
+                        $('#{{ nsp }}_addBtn').prop('disabled', true);
+                        $('#{{ nsp }}_addBtn').text('{{form.vars.addBtn_label_max}}');
+                    }
+                },
+                'remove' : function(rmvBtn){
+                   rmvBtn.parent().remove();
+
+                   var container = $('#{{ nsp }}_div');
+
+                   if (container.children().length < _maxItems)
+                    {
+                        $('#{{ nsp }}_addBtn').prop('disabled', false);
+                        $('#{{ nsp }}_addBtn').text('{{form.vars.addBtn_label}}');
+                    }
+                }
+            }
+        }())
+    </script>
+{% endblock farola_collection_widget -%}

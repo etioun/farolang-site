@@ -1,0 +1,16 @@
+{% extends "FarolaUserBundle::prelogin-base.html.twig" %}
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+
+{% block modal_title %}
+    Reset password
+{% endblock modal_title %}
+
+{% block content %}
+<form action="{{ path('fos_user_resetting_reset', {'token': token}) }}" {{ form_enctype(form) }} method="POST" class="fos_user_resetting_reset">
+    {{ form_widget(form) }}
+    <div>
+        <input class="btn btn-primary" type="submit" value="{{ 'resetting.reset.submit'|trans({}, 'FOSUserBundle') }}" />
+    </div>
+</form>
+
+{% endblock content %}

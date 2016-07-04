@@ -1,0 +1,64 @@
+{% extends '::base.html.twig' %}
+{% form_theme form 'FarolaNoticeBundle:My-notice:edit_blocks.html.twig' %}
+{% import '::global_macros.html.twig' as gm %}
+
+{% block title %}Farolang - Notice edition{% endblock %}
+
+{% block navbar %}
+  
+  {% set otherLinks = [{ 'path': path('farola_notice_my_list'), 'name':'Go to my notices'}]  %} 
+
+  {{ mnv.navbar(null,false, otherLinks) }}
+{% endblock navbar %}
+
+{% block body %}
+    <div class="container" role="main">
+        
+        {# <div class="row frl-margin-bottom-xs">
+        	<div class="col-md-8 col-md-offset-2">
+        		{{ gm.goMyNoticesButton() }}
+        	</div>
+        </div> #}
+        <div class="row">
+        	<div class="col-md-8 col-md-offset-2">
+        		<div class="panel panel-primary frl-edit-notice-panel">
+		            <div class="panel-heading">
+		            	{% set notice = form.vars.value %}
+		            	{% if notice and notice.id %}
+		            		<h3 class="panel-title">Notice #{{ notice.id }}</h3>
+		            	{% else %}
+		            		<h3 class="panel-title">New notice 
+								{% if (nh.isCategory(notice, 'language-exchange')) %}
+				            		: "Hello ! I'm looking for a language partner"
+				            	{% elseif (nh.isCategory(notice, 'student')) %}
+				            		: "Hello ! I want to speak a language ! Are there any teachers around ?"
+				            	{% elseif (nh.isCategory(notice, 'teacher')) %}
+				            		: "Hello ! I can teach you a language"
+				            	{% elseif (nh.isCategory(notice, 'other')) %}
+				            		: "Hello ! I have something special to tell you !"
+				            	{% endif %}
+		            		</h3>
+		            	{% endif %}
+		            </div>
+		            <div class="panel-body">
+		                {{ form_start(form) }}
+		                {{ form_widget(form) }}
+		                <div class="col-md-2 col-md-offset-5 btn-block">
+			                <button type="submit" class="btn btn-success">
+			                	{% if notice.id %}	
+				                	<span class="fa fa-magic"></span>
+				                	Update
+				                {% else %}
+				                	<span class="glyphicon glyphicon-pushpin"></span>
+				                	Post it !
+				            	{% endif %}
+			                </button>
+			             </div>
+		                {{ form_end(form) }}
+		            </div>
+		        </div>
+        	</div>
+        </div>
+    </div>
+{% endblock %}
+

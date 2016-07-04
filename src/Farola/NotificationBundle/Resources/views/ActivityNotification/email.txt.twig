@@ -1,0 +1,25 @@
+{% block subject %}
+{% autoescape false %}
+Farola - New unread messages
+{% endautoescape %}
+{% endblock %}
+{% block body_text %}
+{% autoescape false %}
+Hi {{ name }} ! 
+
+You've got new unread messages !
+
+Log in {{path('farola_home')}} to see them.
+
+Farola
+{% endautoescape %}
+{% endblock %}
+{% block body_html %}
+Hi {{ name }} !<br>
+<br>
+You've got new unread messages !<br>
+<br>
+<a href="{{url('farola_message_board')}}">Click here to check them.</a><br>
+<br>
+Farola
+{% endblock %}

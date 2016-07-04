@@ -1,0 +1,16 @@
+{% extends "::base.html.twig" %}
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+
+{% block body %}
+<div class="container frl-container">
+	<ul class="nav nav-tabs" role="tablist">
+        <li class="active" ><a >Preferences</a></li>
+        <li class=""><a href="{{path('fos_user_profile_edit')}}">Identifiers</a></li>
+        <li class=""><a href="{{path('fos_user_change_password')}}">Password</a></li>
+    </ul>
+    
+    <div class="col-md-6 frl-margin-top-sm">
+    {{form(form)}}
+	</div>
+</div>
+{% endblock body %}

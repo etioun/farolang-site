@@ -1,0 +1,225 @@
+{% extends 'FarolaProfileBundle:Edit:base.html.twig' %}
+{% import 'FarolaProfileBundle:Content:m-menu-edit.html.twig' as me %}
+
+{% block edit_menu %}
+  {{ me.menu('picture') }}
+{% endblock edit_menu %}
+
+{% block edit_content %}
+  <style type="text/css">
+     /*.img-container  {
+      background-color: #f7f7f7;
+      border: 1px solid #eee;
+      box-shadow: inset 0 0 3px #f7f7f7;
+      max-height: 400px;
+      max-width: 400px;      
+      }
+      }*/
+
+      @media (min-width: 900px)  {
+        .img-container  {
+          background-color: #f7f7f7;
+          border: 1px solid #eee;
+          box-shadow: inset 0 0 3px #f7f7f7;
+          max-height: 400px;
+          max-width: 400px;      
+        }
+      }
+
+      @media (max-width: 899px)  {
+        .img-container  {
+          background-color: #f7f7f7;
+          border: 1px solid #eee;
+          box-shadow: inset 0 0 3px #f7f7f7;
+          max-height: 200px;
+          max-width: 200px;      
+        }
+      }
+
+      .img-container img {
+      /*width: 100%;
+      width: 100%;*/
+    }
+
+    </style>
+
+    <div class="row">
+      <div class="col-md-3 col-xs-offset-2">
+        <div class="thumbnail">
+          <img src="{{ picUrl }}" id="profilePic" >
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3 col-xs-offset-2">
+        <button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-primary">Change</button> 
+        <div class="pull-right">
+          <button type="button " onClick="window.location.href='{{ path('farola_profile_remove_pic')}}'" class="btn btn-warning">Remove</button> 
+        </div>
+      </div>
+    </div>
+
+{% macro modify_picture() %}
+
+<div class="container" role="main">
+  <div class="row form-group">
+    <div class="col-md-8">
+      <label class="control-label">Step one : </label>
+      <input type="file" class="file" id="fileInput" onChange="updateFile($(this), $('#imgSelected'))" data-show-remove="false" data-show-preview="false" data-show-upload="false" data-show-caption="false" data-browse-label="Choose a picture &hellip;" accept="image/*">
+    </div>
+  </div>
+  <div id="step2-div" style="display:none;">
+    <div class="row form-group">
+      <div class="col-md-8">
+        <label class="control-label">Step two, Select de best part of the picture </label>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-xs-1 col-xs-offset-2">
+        <button class="btn btn-default" type="button" onclick="$('#imgSelected').cropper('rotate',90)">Rotate</button>
+        <button class="btn btn-default" type="button" onclick="updateFile($('#fileInput'), $('#imgSelected'))">Reload</button>
+      </div>
+      <div class="img-container col-xs-12">
+        <img src="" id="imgSelected" class="img-responsive" >
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-8">
+        <label class="label-control">Step three : </label>
+        <button class="btn btn-primary" id="showPreviewBtn" type="button" onClick="showPreview($('#imgSelected'), $('#previewCanvas'))">Show preview</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-offset-3">
+        <canvas id="previewCanvas"></canvas>
+        <img id="previewImg"></img>
+      </div>
+    </div>
+  </div>
+  <div id="step4-div" style="display:none;">
+    <div class="row form-group">
+      <div class="col-md-8">
+        <label class="label-control">Last step : </label>
+        <button onclick="upload($('#previewCanvas'))" type="button" class="btn btn-success">Upload it !</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
+
+
+  <div class="modal fade" id="myModal" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+    <div class="modal-dialog  modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title" id="myModalLabel">Change picture</h4>
+        </div>
+        <div class="modal-body">
+          {{ _self.modify_picture() }}
+        </div>
+        <div class="modal-footer">
+          <button  type="button" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- XXX JS -->
+  <script>
+function updateFile(fileInptElt, rawImgElt){
+  if (fileInptElt[0].files && fileInptElt[0].files[0]) 
+  {
+    var reader = new FileReader();
+    reader.readAsDataURL(fileInptElt[0].files[0]);
+
+    reader.onload = function (e) {
+      var image = new Image();
+      image.onload = function(){
+        var canvas = document.createElement('canvas');
+
+        var ctx = canvas.getContext("2d");
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        canvas.width = image.width;
+        canvas.height = image.height;
+        ctx.drawImage(image, 0, 0,image.width,image.height);
+
+        refSize = Math.min(canvas.width, canvas.height);
+
+        $.fn.cropper.setDefaults({
+          aspectRatio: 1 / 1,
+          zoomable: false,
+          resizable: true,
+          data: {
+            x: refSize/10,
+            y: refSize/10,
+            width: refSize*8/10,
+            height: refSize *8/10
+          }
+        });
+        rawImgElt.cropper("replace", canvas.toDataURL('image/jpeg'));
+      };
+      image.src = e.target.result;
+    }
+    $('#step2-div').show('fast');
+  }
+}
+
+function showPreview(imgModifiedElt, canvasTrgtElt) {
+
+  var dataUrl = imgModifiedElt.cropper("getDataURL", {'width':200, 'height':200}, "image/jpeg");
+  var image = new Image();
+  image.onload = function(){
+    var canvas = canvasTrgtElt.get(0);
+
+    // image.height *= 200 / image.height;
+    // image.width *= 200 / image.width;
+    var ctx = canvas.getContext("2d");
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.width = image.width;
+    canvas.height = image.height;
+    ctx.drawImage(image, 0, 0, image.width, image.height);
+  };
+  image.src = dataUrl;
+  $('#step4-div').show('fast');
+}
+
+          function upload(canvasElt)
+          {
+            var canvas = canvasElt.get(0);
+            var dataUrl=  canvas.toDataURL('image/jpeg'); 
+
+            var form = document.createElement("form");
+            form.setAttribute("method", "post");
+            form.setAttribute("action", "{{path('farola_profile_edit', {'tabId':'picture'})}}");
+
+            var hiddenField = document.createElement("input");
+            hiddenField.setAttribute("type", "hidden");
+            hiddenField.setAttribute("name", "picData");
+            hiddenField.setAttribute("value", dataUrl);
+
+            form.appendChild(hiddenField);
+            
+            document.body.appendChild(form);
+            form.submit();
+          } 
+
+          </script>
+        {% endblock edit_content %}
+
+        {% block stylesheets %}
+          {{ parent()}}
+          <link rel="stylesheet" href="/Farola/web/front/vendor/cropper.min.css"></script>
+          <link rel="stylesheet" href="/Farola/web/front/vendor/fileinput.min.css"></script>
+        {% endblock stylesheets %}
+
+        {% block javascripts %}
+          {{ parent()}}
+          <script src="/Farola/web/front/vendor/cropper.min.js"></script>
+          <script src="/Farola/web/front/vendor/fileinput.min.js"></script>
+        {% endblock javascripts %}
+

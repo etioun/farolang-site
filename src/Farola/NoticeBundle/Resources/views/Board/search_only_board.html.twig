@@ -1,0 +1,56 @@
+{% extends '::base.html.twig' %}
+{% import 'FarolaNoticeBundle:Common:m-notice.html.twig' as mn %}
+
+{% form_theme searchForm 'FarolaNoticeBundle:Board:board_blocks.html.twig' %}
+
+{% block title %}Farolang - Notice search{% endblock %}
+
+{% block body %}
+
+<div class="container" role="main">
+    <section id="step1">
+        <div class="row">
+            <div class="col-md-offset-2 col-md-8 " >
+                <div class="alert alert-success">
+                    <p >Hi there ! <b>Farolang</b> is a community-driven site with the purpose to promote cultural exchange and help people learning languages. 
+                    </p>
+                    <p >Just a few clicks and you can browse other members notices, post yours, and leave comments on other members you liked ! So it's really easy to find teachers, language partners, students, organize events, meet people.... </p>
+                    <p class="text-center"><b>Or anything you have in mind !!! </b></p>
+                </div>
+                <div style="text-align:center;">
+                    <button class="btn btn-success frl-rounded-lg" onclick="goToStep2()">Continue !</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="step2" style="display:none;">
+        <div class="row">
+            <div class="col-md-offset-2 col-md-8 " >
+                <h5 style="margin-top:0px; text-align:center;" class="alert alert-info"> To get it started, just fill up this little search form :</h5> 
+            </div>
+        </div>
+        <div class="row" >
+            <div class="col-md-offset-4 col-md-4 frl-search-panel">
+            	{{ form_start(searchForm, {'action': path('farola_notice_board_all'),'attr': {'id':'searchForm'}}) }}
+                {{ form_widget(searchForm) }}
+    			<div class="text-center">
+               	 <button type="submit" class="btn btn-primary frl-rounded-lg"><span class="glyphicon glyphicon-search" ></span> Search</button>
+            	</div>
+                {{ form_end(searchForm) }}
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    function goToStep2() {
+        $('#step1').hide();
+        $('#step2').slideToggle();
+    }
+</script>
+
+
+{% endblock body %}
+
+
+

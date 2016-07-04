@@ -1,0 +1,78 @@
+{% macro inputTypeahead(idCtrl, idHidden, datas, defaultData, isRequired, styleWrapper, styleCtrl) %}
+    {% set nsp = idCtrl %}
+    {# {% set dataDisp = null %} #}
+    {% set dataName = defaultData ? defaultData['name'] : '' %}
+    {% set dataCode = defaultData ? defaultData['code'] : '' %}
+        
+    <span id="{{nsp}}" style="{{ styleWrapper }} ">
+        <input type="text" style="{{styleCtrl}}" class="form-control" onblur="{{nsp}}_selectModule.clearIfDirty()" onfocus="{{nsp}}_selectModule.initInput()" id="{{nsp}}_input" value="{{ dataName }}" {%- if isRequired %} required="required"{% endif -%} placeholder="Start typing&hellip;" >
+
+        <input id="{{ idHidden }}" type="hidden" value="{{ dataCode }}">
+    </span>
+    {# {{ block('hidden_widget') }} #}
+
+    <script type="text/javascript">
+
+        var {{nsp}}_selectModule = (function(){
+
+            var _dataSource = {
+            {% for code, name in datas %}
+                    "{{code}}":"{{name|raw}}",
+                {% endfor %} };
+
+
+            var _initialized = false;
+            var _lastSelected = "{{ dataName }}";
+
+            function _storeSelection(event, selection){
+                _lastSelected = selection.name;
+                $('#{{idHidden}}').val(selection.code);
+            }
+
+            return {
+                'clearIfDirty': function() {
+                    // console.log(_initialized);
+                    // console.log(_lastSelected);
+                    // console.log($('#{{nsp}}_input').typeahead('val'));
+
+                    if (_initialized == false)
+                        return;
+
+                    if (_lastSelected != $('#{{nsp}}_input').typeahead('val'))
+                    {
+                        _lastSelected = '';
+                        $('#{{nsp}}_input').typeahead('val','');
+                        $('#{{idHidden}}').val('');
+                    }
+                },
+
+                'initInput': function(){
+                    if (_initialized)
+                        return;
+
+                    var source = new Bloodhound({
+                      datumTokenizer: Bloodhound.tokenizers.obj.nonword('name'),
+                      queryTokenizer: Bloodhound.tokenizers.nonword,
+                      limit: 5,
+                      local: $.map(_dataSource, function(name, code) {
+                                        return {'name':name, 'code':code};
+                                    })
+                    });
+
+                    source.initialize();
+
+                    //it makes to input loose the focus
+                    $('#{{nsp}}_input').typeahead( {highlight: true}, {
+                      displayKey: 'name',
+                      source: source.ttAdapter()
+                    })
+                    .on('typeahead:selected',  _storeSelection)
+                    .on('typeahead:autocomplete',  _storeSelection)
+
+                    _initialized = true;
+                    $('#{{nsp}}_input').focus();
+                }
+            }
+        }())
+    </script>
+{% endmacro %}

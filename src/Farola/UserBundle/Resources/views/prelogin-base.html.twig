@@ -1,0 +1,37 @@
+{% extends "::base.html.twig" %}
+{% block navbar %}
+{% endblock navbar %}
+
+{% block body %}
+
+<img src="/Farola/web/front/farola/images/lamp-post-beach-compress.jpg">
+<div class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <a href="{{path('farola_home')}}" class="close" ><span >&times;</span></a>
+        <h4 class="modal-title">
+          {% block modal_title %}
+         {% endblock modal_title %}
+        </h4>
+      </div>
+      <div class="modal-body">
+        {% block content %}
+        {% endblock content %}
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  
+  <script type="text/javascript">
+    $( document ).ready(function() {
+      $('.modal').modal({show:true, backdrop:'static'});
+      });
+  </script>
+{% endblock %}  
+

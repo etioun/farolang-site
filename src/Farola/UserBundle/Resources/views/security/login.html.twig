@@ -1,0 +1,33 @@
+{% extends "FarolaUserBundle::prelogin-base.html.twig" %}
+
+{% block modal_title %}
+    Login  <small><a href="{{ path('fos_user_registration_register') }}" >No account ? Create one here (it's free !)</a></small>
+{% endblock modal_title %}
+
+{% block content %}
+        {% if error %}
+            <div class="alert alert-danger">{{ error|trans }}</div>
+        {% endif %}
+
+        <form  action="{{ path("fos_user_security_check") }}" method="post">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+
+        <div class="form-group">
+            <label for="username">{{ 'security.login.username_email'|trans({}, 'FarolaUserBundle') }}</label>
+            <input class="form-control" type="text" id="username" name="_username" value="{{ last_username }}" required="required" />
+        </div>
+        <div class="form-group">
+            <label for="password">{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}</label>
+            <input class="form-control"  type="password" id="password" name="_password" required="required" />
+        </div>
+        <div class="checkbox">
+        <label>
+          <input type="checkbox" id="remember_me" name="_remember_me" checked="checked" value="on"> {{ 'security.login.remember_me'|trans({}, 'FOSUserBundle') }}
+        </label>
+      </div>
+
+        <input class="btn btn-primary" type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}" />
+
+        <a href="{{ path('fos_user_resetting_request') }}">Forgot password ?</a>
+        </form>
+{% endblock content %}

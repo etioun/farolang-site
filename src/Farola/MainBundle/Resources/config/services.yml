@@ -1,0 +1,42 @@
+services:
+    farola.form.type.location:
+        class: Farola\MainBundle\Form\Common\LocationType
+        tags:
+            - { name: form.type, alias: farola_location }
+
+    farola.form.type.tag:
+        class: Farola\MainBundle\Form\Common\TagType
+        tags:
+            - { name: form.type, alias: farola_tag }
+
+    farola.form.type.country:
+        class: Farola\MainBundle\Form\Common\CountryType
+        tags:
+            - { name: form.type, alias: farola_country }
+
+    farola.form.type.language:
+        class: Farola\MainBundle\Form\Common\LanguageType
+        arguments: ["@farola.ref_data.helper"]
+        tags:
+            - { name: form.type, alias: farola_language }
+
+    farola.form.type.timezone:
+        class: Farola\MainBundle\Form\Common\TimezoneType
+        tags:
+            - { name: form.type, alias: farola_timezone }
+
+    farola.form.type.filterable_select:
+        class: Farola\MainBundle\Form\Common\FilterableSelectType
+        tags:
+            - { name: form.type, alias: farola_filterable_select }
+
+    farola.form.type.collection:
+        class: Farola\MainBundle\Form\Common\CollectionType
+        tags:
+            - { name: form.type, alias: farola_collection }
+
+    farola.calc.lon_lat:
+        class: Farola\MainBundle\Calc\LonLatCalc
+
+    farola.ref_data.helper:
+        class: Farola\MainBundle\RefData\RefDataHelper

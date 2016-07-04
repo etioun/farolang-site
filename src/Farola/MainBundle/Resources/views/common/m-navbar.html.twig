@@ -1,0 +1,84 @@
+{% macro messageBoardLink() %}
+    {% set nbUnread = mh.nbUnread(ph.currentUserProfile()) %}
+    {% set envelopeClass = "glyphicon glyphicon-envelope " ~ (nbUnread >0 ? 'frl-blue' : '') %}
+    <a class="frl-nav-icon-link" href="{{path('farola_message_board')}}" ><span class="{{envelopeClass}}"  ></span> 
+        {% if (nbUnread >0 ) %}<span class="badge frl-badge-red" style="position: absolute;right: 5px;top: 10px;">{{nbUnread}}</span>{% endif %} <span class="visible-xs-inline visible-sm-inline"> Messages</span></a>
+{% endmacro %}
+
+{% macro navbar(qsDefault,backLink, otherLinks) %}
+{% import 'FarolaMainBundle:Common:m-quicksearch.html.twig' as mqs %}
+{% import '::global_macros.html.twig' as gm %}
+
+  <nav class="navbar navbar-default frl-nav-bar">
+    <div class="container-fluid">
+      <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-nav-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="frl-nav-brand-link" href="{{ path('farola_home') }}"><img src="{{asset('front/farola/images/farola-logo5.png')}}"></a>
+        </div>
+        {# <li>
+                <p class="navbar-text visible-lg">Large Devices!</p>
+                 <p class="navbar-text visible-md">Medium Devices!</p>
+                 <p class="navbar-text visible-sm">Small Devices</p>
+                 <p class="navbar-text visible-xs">Extra Small Devices</p>
+            </li> #}
+
+      <div class="collapse navbar-collapse" id="main-nav-collapse">
+        
+
+         <ul class="nav navbar-nav" style="padding-top:11px;vertical-align:middle;margin-left:3%;">
+            {# {% set qsDefault = (qsDefault is defined ? qsDefault : null) %}
+            <li >{{ mqs.quicksearch(qsDefault) }}</li> #}
+            <li><a href="{{path('farola_notice_board_all')}}" class="frl-nav-action-link"><span style="margin-right:5px;" class="glyphicon glyphicon-search"></span>Browse notices</a></li>
+            <li><a class="frl-nav-action-link" href="{{path('farola_profile_board')}}">Find a member</a></li>
+            <li><a  class="frl-nav-action-link" href="{{path('farola_notice_new')}}"><span style="margin-right:5px;" class="glyphicon glyphicon-pushpin"></span>Post a new notice</a></li>
+        </ul> 
+
+          <ul class="nav navbar-nav navbar-right">
+            {% if app.user %}
+              <li class="hidden-xs hidden-sm">
+                  {{_self.messageBoardLink()}}
+              </li>
+              <li class="dropdown frl-navbar-dropdown">
+                <a href="#" class="dropdown-toggle frl-nav-profile-link" data-toggle="dropdown" role="button" aria-expanded="false">{{ ph.currentUserProfile.name }} <img src="{{ ph.profilePictureUrl(ph.currentUserProfile) }}"  class="img-circle" width='30' height='30'><span class="caret"></span></a>   
+                <ul class="dropdown-menu " role="menu">
+                  {# <li><a href="{{ path('farola_home') }}">Dashboard</a></li>
+                  <li><a href="{ { path('farola_message_board') }}">Messages</a></li>#}
+                  <li><a href="{{ path('farola_profile_show', { 'profileId' : ph.currentUserProfile.id }) }}">Profile</a></li>
+                  <li><a href="{{ path('farola_notice_my_list') }}">My notices</a></li>
+                  <li><a href="{{ path('farola_user_preference') }}">Preferences and settings</a></li>
+                  <li><a href="{{ path('farola_user_feedback') }}">Contact us</a></hi>
+                  <li>  <a href="{{ path('fos_user_security_logout') }}">
+                      {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+                  </a></li>
+                </ul>
+              </li>
+            {% else %}
+              <li>
+                    <a href="{{path('fos_user_security_login')}}" >Log in</a>
+                </li>
+                 <li>
+                    <a href="{{ path('fos_user_registration_register') }}" >Create an account</a>
+                </li>
+            {% endif %}
+          </ul>
+        </div>
+    </div>
+
+    
+  </nav>
+  <div style="margin-bottom:5px;">
+      {% if backLink %}
+        <a href="javascript:void(0)" onclick="history.back()"><span class="glyphicon glyphicon-menu-left"></span> Previous page </a>
+      {% endif %}
+      {{ ( backLink and otherLinks ) ? ' | ' :'<span style="margin-left:10px;"></span>' }}
+      {% for link in otherLinks %}
+        <a href="{{ link['path'] }}"> {{link['name'] }} <span class="glyphicon glyphicon-menu-right"></span></a>
+      {% endfor %}
+    </div>
+{% endmacro %}
+

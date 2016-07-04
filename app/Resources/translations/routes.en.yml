@@ -1,0 +1,71 @@
+# Desc: /demo/secured/hello
+acme_demo_secured_hello: /demo/secured/hello
+
+# Desc: /main/hello/{name}
+farola_main_homepage: '/main/hello/{name}'
+
+# Desc: /message/deleted
+fos_message_deleted: /message/deleted
+
+# Desc: /message/
+fos_message_inbox: /message/
+
+# Desc: /message/search
+fos_message_search: /message/search
+
+# Desc: /message/sent
+fos_message_sent: /message/sent
+
+# Desc: /message/{threadId}/delete
+fos_message_thread_delete: '/message/{threadId}/delete'
+
+# Desc: /message/new
+fos_message_thread_new: /message/new
+
+# Desc: /message/{threadId}/undelete
+fos_message_thread_undelete: '/message/{threadId}/undelete'
+
+# Desc: /message/{threadId}
+fos_message_thread_view: '/message/{threadId}'
+
+# Desc: /profile/change-password
+fos_user_change_password: /profile/change-password
+
+# Desc: /profile/edit
+fos_user_profile_edit: /profile/edit
+
+# Desc: /profile/
+fos_user_profile_show: /profile/
+
+# Desc: /register/check-email
+fos_user_registration_check_email: /register/check-email
+
+# Desc: /register/confirm/{token}
+fos_user_registration_confirm: '/register/confirm/{token}'
+
+# Desc: /register/confirmed
+fos_user_registration_confirmed: /register/confirmed
+
+# Desc: /register/
+fos_user_registration_register: /register/
+
+# Desc: /resetting/check-email
+fos_user_resetting_check_email: /resetting/check-email
+
+# Desc: /resetting/request
+fos_user_resetting_request: /resetting/request
+
+# Desc: /resetting/reset/{token}
+fos_user_resetting_reset: '/resetting/reset/{token}'
+
+# Desc: /resetting/send-email
+fos_user_resetting_send_email: /resetting/send-email
+
+# Desc: /login_check
+fos_user_security_check: /login_check
+
+# Desc: /login
+fos_user_security_login: /login
+
+# Desc: /logout
+fos_user_security_logout: /logout

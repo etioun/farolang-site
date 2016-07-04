@@ -1,0 +1,9 @@
+{% extends "FarolaUserBundle::prelogin-base.html.twig" %}
+
+{% block modal_title %}
+    Register
+{% endblock modal_title %}
+
+{% block content %}
+    <p>{{ 'registration.check_email'|trans({'%email%': user.email}, 'FOSUserBundle') }}</p>
+{% endblock content %}

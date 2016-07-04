@@ -1,0 +1,102 @@
+{% extends 'bootstrap_3_layout.html.twig' %}
+
+{% block farola_notice_onlineOrLocation_widget -%}
+	
+	<div class="checkbox">
+	  <label>
+	    <input type="checkbox"  onclick="showHideLocation(this)" id="{{ form.nearLocation.vars.id}}" name="{{ form.nearLocation.vars.full_name}}" {% if form.vars.value.nearLocation %}checked{% endif %}>
+	    {{ form.vars.onlineCheckerLabel.location }}
+	  </label>
+	</div>
+
+	<div id="{{ form.location.vars.id }}-div" {% if form.vars.value.nearLocation == false %}style='display:none'{% endif %}>
+		{{ form_row(form.location) }}
+	</div>
+
+	<div class="checkbox">
+	  <label>
+	    <input type="checkbox"   onclick="showHideOnline(this)" id="{{ form.onlineService.vars.id}}" name="{{ form.onlineService.vars.full_name}}" {% if form.vars.value.onlineService %}checked{% endif %}>
+	    {{ form.vars.onlineCheckerLabel.online }}
+	  </label>
+	</div>
+
+	{% if form.onlineMethod is defined %}
+		<div id="{{ form.onlineMethod.vars.id }}-div" {% if form.vars.value.onlineService  == false %}style='display:none'{% endif %}>
+			{{ form_row(form.onlineMethod) }}
+		</div>
+	{% endif %}
+
+	<script>
+		function showHideLocation(checkboxElt) {
+			if (checkboxElt.checked)
+			{
+				$('#{{ form.location.vars.id }}-div').show('fast');
+			}
+			else
+			{
+				$('#{{ form.location.vars.id }}-div').hide('fast');
+			}
+		}
+
+		{% if form.onlineMethod is defined %}
+		function showHideOnline(checkboxElt) {
+			if (checkboxElt.checked)
+			{
+				$('#{{ form.onlineMethod.vars.id }}-div').show('fast');
+			}
+			else
+			{
+				$('#{{ form.onlineMethod.vars.id }}-div').hide('fast');
+			}
+		}
+		{% endif %}	
+	</script>
+{%- endblock farola_notice_onlineOrLocation_widget %}
+
+{% block farola_noticebundle_availability_widget -%}
+	
+	<div class="checkbox">
+	    <label>
+	      <input type="checkbox" id="{{ form.availableAnytime.vars.id}}" name="{{ form.availableAnytime.vars.full_name}}" onchange="showHidePeriods(this)" {% if form.vars.value.availableAnytime %}checked {% endif %}> Available anytime
+	    </label>
+	 </div>
+
+	<div id='availPeriods-div' {% if form.vars.value.availableAnytime %} style="display:none;" {% endif %}>
+		{{ form_row(form.timezone) }}
+		{{ form_row(form.availabilities) }}
+	</div>
+	<script type="text/javascript">
+		function showHidePeriods(checkboxElt) {
+			if (checkboxElt.checked)
+			{
+				$('#availPeriods-div').hide('fast');
+			}
+			else
+			{
+				$('#availPeriods-div').show('fast');
+			}
+		}
+	</script>
+{% endblock farola_noticebundle_availability_widget -%}
+
+{% block farola_noticebundle_availabilityrange_widget -%}
+	<div id="{{ form.vars.id }}" class="form-inline form-group">
+            {{ form_widget(form.dayOfWeek) }}
+            during
+            {{ form_widget(form.period) }}
+        </div> 
+{% endblock farola_noticebundle_availabilityrange_widget -%}
+
+
+{% block farola_noticebundle_rate_widget -%}
+	
+	<div class="row">
+		<div class="col-md-offset-0 col-md-3">
+			{{ form_row(form.localPrice) }}
+		</div>
+		<div class="col-md-offset-1 col-md-6">
+			{{ form_row(form.localCurrency) }}
+		</div>
+	</div>
+	
+{% endblock farola_noticebundle_rate_widget -%}

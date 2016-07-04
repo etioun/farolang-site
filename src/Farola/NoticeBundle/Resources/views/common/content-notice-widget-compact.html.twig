@@ -1,0 +1,17 @@
+{% import '::global_macros.html.twig' as gm %}
+{% import 'FarolaNoticeBundle:Common:m-widget-content.html.twig' as mwc %}
+
+{% set noticeProfile = notice.profile %}
+
+<div class="media">
+    <span class="pull-left">
+      <a  href="{{ path('farola_profile_show', {'profileId': noticeProfile.id})}} ">
+          <img class="media-object img-circle" src="{{ ph.profilePictureUrl(noticeProfile) }}" width="30" Length="30" >
+      </a>
+    </span>
+    <div class="media-body">
+        <h4 class="media-heading ">{{ noticeProfile.name }} {{ gm.viewNoticeButton3(notice) }}</h4>  
+       {{ mwc.quickDescription(notice,'left') }}
+    </div> 
+</div>
+

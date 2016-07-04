@@ -1,0 +1,29 @@
+{% extends 'FarolaNoticeBundle:Common:content-notice-widget-base.html.twig' %}
+{% import '::global_macros.html.twig' as gm %}
+{% import 'FarolaNoticeBundle:Common:m-widget-content.html.twig' as mwc %}
+
+
+
+{% block main_right %}
+
+ 
+ {% if showMode == false %}
+  {{ gm.viewNoticeButton(notice,'btn-block') }}
+  {% else %}
+  
+  {% if app.user %}
+    {{ gm.sendReplyButton(notice.id ~ '-reply','Reply to ' ~ noticeProfile.name ~ ' about this notice', path('farola_message_notice_put_ajax', {'noticeId': notice.id}), path('farola_message_board',{'category': 'notice'}), 'btn-block', nh.isUserNotice(notice)) }}
+  {% else %}
+    {{ gm.sendReplyButtonFake('btn-block', path('farola_notice_show_with_login', {'noticeId':notice.id })) }}
+  {% endif %}
+  {{ gm.viewProfileButton(noticeProfile,'btn-block') }}
+{% endif %}
+ 
+  
+{% endblock main_right %}
+
+{% block bottom_row %}
+  <div class="col-md-11">
+    {{ mwc.description(notice, showMode) }}
+  </div>
+{% endblock bottom_row %}

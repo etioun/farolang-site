@@ -1,0 +1,71 @@
+# Desc: /demo/secured/hello
+acme_demo_secured_hello: /demo/secured/hello   # FIXME
+
+# Desc: /main/hello/{name}
+farola_main_homepage: '/main/hello/{name}'   # FIXME
+
+# Desc: /message/deleted
+fos_message_deleted: /message/deleted   # FIXME
+
+# Desc: /message/
+fos_message_inbox: /message/   # FIXME
+
+# Desc: /message/search
+fos_message_search: /message/search   # FIXME
+
+# Desc: /message/sent
+fos_message_sent: /message/sent   # FIXME
+
+# Desc: /message/{threadId}/delete
+fos_message_thread_delete: '/message/{threadId}/delete'   # FIXME
+
+# Desc: /message/new
+fos_message_thread_new: /message/new   # FIXME
+
+# Desc: /message/{threadId}/undelete
+fos_message_thread_undelete: '/message/{threadId}/undelete'   # FIXME
+
+# Desc: /message/{threadId}
+fos_message_thread_view: '/message/{threadId}'   # FIXME
+
+# Desc: /profile/change-password
+fos_user_change_password: /profile/change-password   # FIXME
+
+# Desc: /profile/edit
+fos_user_profile_edit: /profile/edit   # FIXME
+
+# Desc: /profile/
+fos_user_profile_show: /profile/   # FIXME
+
+# Desc: /register/check-email
+fos_user_registration_check_email: /register/check-email   # FIXME
+
+# Desc: /register/confirm/{token}
+fos_user_registration_confirm: '/register/confirm/{token}'   # FIXME
+
+# Desc: /register/confirmed
+fos_user_registration_confirmed: /register/confirmed   # FIXME
+
+# Desc: /register/
+fos_user_registration_register: /register/   # FIXME
+
+# Desc: /resetting/check-email
+fos_user_resetting_check_email: /resetting/check-email   # FIXME
+
+# Desc: /resetting/request
+fos_user_resetting_request: /reinitialisation/demande   # FIXME
+
+# Desc: /resetting/reset/{token}
+fos_user_resetting_reset: '/resetting/reset/{token}'   # FIXME
+
+# Desc: /resetting/send-email
+fos_user_resetting_send_email: /resetting/send-email   # FIXME
+
+# Desc: /login_check
+fos_user_security_check: /login_check   # FIXME
+
+# Desc: /login
+fos_user_security_login: /connexion   # FIXME
+
+# Desc: /logout
+fos_user_security_logout: /deconnexion   # FIXME

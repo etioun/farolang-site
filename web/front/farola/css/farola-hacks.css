@@ -1,0 +1,8 @@
+.form-inline  span.twitter-typeahead {
+  width: auto;
+  vertical-align: top;
+}
+
+.pac-container {
+    z-index: 1051;
+}

@@ -1,0 +1,64 @@
+
+
+{% macro profile_list(profiles,rmvContactBtn) %}  
+  <ul class="frl-search-results">
+  {% for profile in profiles %}
+    <li>{{ _self.profile_widget(profile,rmvContactBtn) }}</li>
+  {% endfor %}
+  </ul>
+{% endmacro %}
+
+{% macro profile_widget(profile, rmvContactBtn) %}
+{% import '::global_macros.html.twig' as gm %}
+
+<div>
+  <div class="row ">
+      <div class="col-md-2">
+        <a href="{{ path('farola_profile_show', {'profileId': profile.id }) }}">
+            <div class="thumbnail frl-margin-bottom-xs" style="max-width:100px; margin-left: auto; margin-right: auto">
+              <img src="{{ ph.profilePictureUrl(profile) }}" width="100" Length="100" >
+          </div>
+        </a>
+      </div>
+      <div class="col-md-6">
+         <div class="row">
+                <div class="col-xs-12 frl-no-padding">
+                    <h4 class="frl-result-title">
+                      <a href="{{ path('farola_profile_show', {'profileId': profile.id }) }}">{{ profile.name }}</a>
+                      <small><a href="{{ path('farola_profile_show', { 'profileId': profile.id}) }}#reviews" >{{ '{0} (not yet reviewed)|{1} 1 Review|]1,Inf] %count% Reviews'|transchoice(profile.aggReviewCount) }} </a></small>
+                  </h4>
+                </div>
+        </div>
+        <div class="row">
+              <p class="frl-result-metadata">
+                {% if profile.countryOfOrigin %}From {{ph.countryName(profile.countryOfOrigin)}}{% endif %}
+                {% if profile.dateOfBirth and profile.countryOfOrigin %}, {% endif %}
+                {% if profile.dateOfBirth %} {{ ph.age(profile) }} years old{% endif %}
+              </p>
+         </div>
+         <div class="row">
+            {% if profile.address %}<span class="glyphicon glyphicon-map-marker"></span> {{ profile.address}}
+            {% endif %}
+        </div>
+         <div class="row">
+          {% if profile.spokenLanguages %}
+            <span class="fa fa-comments"></span>
+               {% for languageLvl in ph.languageLvlArr(profile) %}
+                    {{ gm.languageLvl_widget(languageLvl) }}
+                {% endfor %}
+         {% endif %}
+        </div>
+      </div> 
+      <div class="col-md-4 col-md-offset-0">
+           {{ gm.viewProfileButton(profile, 'btn-block') }}
+           {% if app.user and (ph.isUserProfile(profile) == false) %}
+            {{ gm.sendMsgButton(profile.id ~ '-msg-modal','Send a message to '~ profile.name, path('farola_message_profile_message_put_ajax', {'profileId':profile.id}),path('farola_message_board'), 'btn-block') }}
+           {% endif %}
+           {% if rmvContactBtn %}
+            <a href="javascript:void(0)" class="btn btn-danger btn-block frl-rounded-lg" onclick="farolaCommon.sendChangeRequest('{{ path('farola_profile_delete_contact_ajax', { 'profileId':profile.id }) }}', '{{ path('farola_profile_contact') }}');"><span class="glyphicon glyphicon-trash"></span> Remove from contact book </a>
+           {% endif %}
+        </div>
+
+  </div>  
+</div>
+{% endmacro  %}

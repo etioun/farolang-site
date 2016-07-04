@@ -1,0 +1,26 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}Farolang - Profile edition {% endblock %}
+
+
+{% block body %}
+
+
+
+<div class="container" role="main">
+  <div class="row">
+     <div class="col-xs-3 ">
+       {% block edit_menu %}
+       {% endblock edit_menu %}
+     </div>
+     <div class="col-xs-9 bs-callout bs-callout-white-custom">
+      {% block edit_content %}
+      {% endblock edit_content %}
+    </div>
+  </div>
+</div>
+
+{% endblock body %}
+
+
+

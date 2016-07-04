@@ -1,0 +1,32 @@
+{% extends '::base.html.twig' %}
+{% import '::global_macros.html.twig' as gm %}
+{% import 'FarolaNoticeBundle:Common:m-notice.html.twig' as mn %}
+
+
+{% block title %}Farolang - Notice edition{% endblock %}
+
+{% block navbar %}
+  
+  {% set otherLinks = [{ 'path': path('farola_notice_my_list'), 'name':'Go to my notices'}]  %} 
+
+  {{ mnv.navbar(null,false, otherLinks) }}
+{% endblock navbar %}
+
+{% block body %}
+    <div class="container" role="main">
+        <div class="row">
+        	<div class="col-md-8 col-md-offset-2">
+        		<div class="panel panel-primary frl-edit-notice-panel">
+		            <div class="panel-heading">
+		            		<h3 class="panel-title">New notice </h3>
+		            </div>
+		            <div class="panel-body">
+		                
+			           	{{ mn.newNoticeCategorySelector('new_notice') }}
+		            </div>
+		        </div>
+        	</div>
+        </div>
+    </div>
+{% endblock %}
+

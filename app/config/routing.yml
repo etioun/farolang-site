@@ -1,0 +1,65 @@
+farola_notification:
+    resource: "@FarolaNotificationBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+farola_profile:
+    resource: "@FarolaProfileBundle/Controller/"
+    type:     annotation
+    prefix:   /profile
+
+# farola_main:
+#     resource: "@FarolaMainBundle/Controller/"
+#     type:     annotation
+#     prefix:   /main
+
+farola_home:
+    resource: "@FarolaHomeBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+farola_message:
+    resource: "@FarolaMessageBundle/Controller/"
+    type:     annotation
+    prefix: /message
+
+farola_notice:
+    resource: "@FarolaNoticeBundle/Controller/"
+    type:     annotation
+    prefix:   /notice
+
+#farola user bundle
+farola_user:
+    resource: "@FarolaUserBundle/Controller/"
+    type:     annotation
+    prefix:   /user
+
+#fos user bundle
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+    prefix: /connection/security
+
+fos_user_register:
+    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
+    prefix: /connection/register
+
+fos_user_resetting:
+    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
+    prefix: /connection/reset
+
+fos_user_profile:
+    resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
+    prefix: /user
+
+fos_user_change_password:
+    resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
+    prefix: /user
+
+admin:
+    resource: '@SonataAdminBundle/Resources/config/routing/sonata_admin.xml'
+    prefix: /admin
+
+_sonata_admin:
+    resource: .
+    type: sonata_admin
+    prefix: /admin

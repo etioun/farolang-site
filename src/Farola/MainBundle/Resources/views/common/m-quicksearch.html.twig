@@ -1,0 +1,128 @@
+{% macro selected(searchType, defaultSearchType) %}
+   {{  (searchType == defaultSearchType) ? 'selected' : '' }}
+{% endmacro %}
+
+{% macro noticeIcon(notice) %}
+  {% if (nh.isCategory(notice, 'teacher')) %}
+          <span class="icon-teacher44" ></span>
+  {% elseif (nh.isCategory(notice, 'student')) %}
+          <span class="icon-openbook1" ></span>
+  {% elseif (nh.isCategory(notice, 'language-exchange')) %}
+          <span class="icon-men14"  ></span>
+  {% endif %}
+{% endmacro %}
+
+
+{# {% macro input(inputType, defaultSearchType, defaultData ) %}
+  {% import 'FarolaMainBundle:Common:m-input-typeahead.html.twig' as mit %}
+
+  {% if inputType == 'language' %}
+    {% set defaultData = (defaultSearchType != 'profile') ? defaultData : null %}
+    {% set displayStyle = (defaultSearchType != 'profile') ? '' : 'display:none;' %}
+      {{ mit.inputTypeahead('language', 'languageCode', rdh.languages, defaultData, false, displayStyle) }}
+  {% else %}
+    {% set defaultData = (defaultSearchType == 'profile') ? defaultData : null %}
+    {% set displayStyle = (defaultSearchType == 'profile') ? '' : 'display:none;' %}
+      <input type="text" class="form-control"  placeholder="Name" id="name" style="{{displayStyle}}" value="{{ defaultData ? defaultData['name'] : '' }}">
+  {% endif %}
+{% endmacro %} #}
+
+
+{% macro quicksearch(defaults) %}
+{% import 'FarolaMainBundle:Common:m-input-typeahead.html.twig' as mit %}
+  {% set defaultData = defaults ? defaults['data'] : null %}
+  {% set defaultSearchType = defaults ? defaults['search_type'] : 'all' %}
+
+  <div class="form-inline">
+      <label><span class="glyphicon glyphicon-flash" style="color:rgb(49, 117, 175);"></span> Browse </label>
+      
+      <select id="categorySelector" class="form-control" onchange="qsModule.changeInput();">
+        <option value="all"  {{ _self.selected('all', defaultSearchType) }}>Notices</option>
+       {#  <option value="learn"  {{ _self.selected('learn', defaultSearchType) }}>Learn</option>
+        <option value="teach" {{ _self.selected('teach', defaultSearchType) }}>Teach</option>
+        <option value="lang_ex_notice" {{ _self.selected('lang_ex_notice', defaultSearchType) }}>Practice</option>
+        <option value="other" {{ _self.selected('other', defaultSearchType) }}>Other notices</option> #}
+        
+        <option disabled="disabled">──────────</option>
+        <option value="profile" {{ _self.selected('profile', defaultSearchType) }}>Members</option>
+       </select>
+        
+       {# {{ _self.input('language',defaultSearchType,defaultData) }}
+       
+       {{ _self.input('name',defaultSearchType,defaultData) }} #}
+
+       <button class="btn btn-primary frl-rounded-lg" type="button" onclick='qsModule.goToSearchPage()' ><span class="glyphicon glyphicon-search"></span></button>
+</div>
+<script type="text/javascript">
+    var qsModule = (function() {
+        var _inputsRef = { 
+            all: [
+                'language',
+                'languageCode',
+                "{{ path('farola_notice_board_all') }}"
+                ],
+            learn: [
+                'language',
+                'languageCode',
+                "{{ path('farola_notice_board_learn') }}"
+                ],
+            teach: [
+                'language',
+                'languageCode',
+                "{{ path('farola_notice_board_teach') }}"
+                ],
+            lang_ex_notice: [
+                'language',
+                'languageCode',
+                "{{ path('farola_notice_board_lang_ex') }}"
+                ],
+            other: [
+                'language',
+                'languageCode',
+                "{{ path('farola_notice_board_other') }}"
+                ],
+            profile: [
+                'name',
+                'name',
+                "{{ path('farola_profile_board') }}" 
+                ],
+        };
+
+        function _hideAll() {
+            for (var property in _inputsRef) {
+                if (_inputsRef.hasOwnProperty(property)) {
+                    $('#'+_inputsRef[property][0]).hide();
+                }
+            }
+        }
+
+        function _show(property) {
+            $('#'+_inputsRef[property][0]).show();
+        }
+
+        function _url(property) {
+            var url = _inputsRef[property][2];
+            // var jqElt = $('#'+_inputsRef[property][1]);
+            // if (jqElt.val() && jqElt.val().trim())
+            // {
+            //    url += '/'+jqElt.val();
+            // }
+            return url;
+        }
+
+        return {
+           changeInput : function(jqSelect) {
+                var newVal = $('#categorySelector').val();
+                //_hideAll();
+                //_show(newVal);
+            },
+            goToSearchPage : function() {
+                console.log($('#categorySelector').val());
+                window.location.href=_url($('#categorySelector').val());
+            }
+        };
+    })();
+
+</script>
+{% endmacro %}
+
